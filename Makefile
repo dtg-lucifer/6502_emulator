@@ -1,4 +1,4 @@
-.PHONY: all run clean
+TEST_FILES := $(shell find . -name "*_test.cc")
 
 all: build
 .PHONY: all
@@ -14,6 +14,12 @@ setup:
 		ln -sf build/compile_commands.json compile_commands.json && \
 		cd ..
 .PHONY: setup
+
+test: $(TEST_FILES)
+	cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+	cmake --build build -- --no-print-directory
+	cd build && ctest
+.PHONY: test
 
 debug:
 	gdb -x .gdbinit ./bin/6502_cpu_emulator

@@ -20,10 +20,10 @@ int main() {
     mem[0x4242] = op(Op::LDA_IM);
     mem[0x4243] = 0x84;
     // add RTS instruction at the end of our subroutine
-    mem[0x4244] = op(Op::RTS);
+    // mem[0x4244] = op(Op::RTS);
     // end - inline test
 
-    cpu.execute(14, mem);  // increased cycle count to include RTS execution
+    cpu.execute(9, mem);  // increased cycle count to include RTS execution
 
     return 0;
 }
