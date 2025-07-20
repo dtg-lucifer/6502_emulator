@@ -17,4 +17,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Wextra")
 # Add the executable
 add_executable(6502_cpu_emulator
     src/main.cpp
+    src/cpu.cpp
+    src/memory.cpp
 )
