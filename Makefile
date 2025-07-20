@@ -15,6 +15,10 @@ setup:
 		cd ..
 .PHONY: setup
 
+debug:
+	gdb -x .gdbinit ./bin/6502_cpu_emulator
+.PHONY: debug
+
 run: all
 	@./bin/6502_cpu_emulator
 .PHONY: run
