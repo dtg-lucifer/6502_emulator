@@ -26,6 +26,7 @@ add_library(emulator_core
     src/memory.cpp
     src/types.cpp
     src/test.cpp
+    src/reader.cpp
 )
 # Make includes available to any target linking against emulator_core
 target_include_directories(emulator_core PUBLIC
