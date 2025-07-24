@@ -1,28 +1,46 @@
-all: build
+all: setup build run
 .PHONY: all
 
 build:
-	@cmake --build build -- -j 12 --no-print-directory
+	@cmake --build build \
+	    -- \
+		-j 12 \
+		--no-print-directory
 .PHONY: build
 
 setup:
 	mkdir -p build && \
-		cmake -S . -B build
+		cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DENABLE_TESTING=OFF && \
+        ln -sf build/compile_commands.json compile_commands.json
 .PHONY: setup
 
-test: $(TEST_FILES)
-	GTEST_COLOR=1 ctest --test-dir build --output-on-failure -j12 && \
-		./build/bin/main_test
-.PHONY: test
+setup-testing:
+	@mkdir -p build && \
+		cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DENABLE_TESTING=ON && \
+        ln -sf build/compile_commands.json compile_commands.json
+.PHONY: setup-testing
 
 debug:
-	gdb -x .gdbinit ./bin/6502_cpu_emulator
+	gdb -x .gdbinit ./build/bin/6502_cpu_emulator
 .PHONY: debug
 
-run: all
-	@./bin/6502_cpu_emulator
+run:
+	./build/bin/6502_cpu_emulator
 .PHONY: run
 
+test: setup-testing build
+	./build/bin/6502_cpu_emulator
+.PHONY: test
+
+debug-test: setup-testing build
+	gdb -x .gdbinit ./build/bin/6502_cpu_emulator
+.PHONY: debug-test
+
 clean:
-	@rm -rf build bin/6502_cpu_emulator
+	@rm -rf build
 .PHONY: clean
+
+reset-test:
+	@cmake -S . -B build -DENABLE_TESTING=OFF
+	@echo "Testing has been disabled"
+.PHONY: reset-test

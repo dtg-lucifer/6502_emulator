@@ -81,10 +81,10 @@ void Cpu::execute(u32 cycles, Mem& mem) {
             case op(Op::JSR): {
                 word addr = fetch_word(cycles, mem);  // Get the absolute address (16bit)
                 // Push return address (PC-1) to stack - high byte first, then low byte
-                mem[stack_base + SP] = (PC - 1) >> 8;  // Push high byte
+                mem[SP] = (PC - 1) >> 8;  // Push high byte
                 SP--;
                 cycles--;
-                mem[stack_base + SP] = (PC - 1) & 0xFF;  // Push low byte
+                mem[SP] = (PC - 1) & 0xFF;  // Push low byte
                 SP--;
                 cycles--;
                 PC = addr;
@@ -94,11 +94,11 @@ void Cpu::execute(u32 cycles, Mem& mem) {
                 // Pull return address from stack - low byte first, then high byte
                 SP++;
                 cycles--;
-                byte lo = mem[stack_base + SP];
+                byte lo = mem[SP];
 
                 SP++;
                 cycles--;
-                byte hi = mem[stack_base + SP];
+                byte hi = mem[SP];
 
                 // Reconstruct the 16-bit address
                 word return_addr = (hi << 8) | lo;

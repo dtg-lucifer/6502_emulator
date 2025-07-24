@@ -8,4 +8,6 @@ using byte = uint8_t;
 using word = uint16_t;
 using u32 = unsigned int;
 
+u32 as_u32(int num);
+
 #endif  // TYPES_H
