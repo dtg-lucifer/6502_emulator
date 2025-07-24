@@ -1,3 +1,4 @@
+#include <iomanip>  // For std::hex, std::setw, etc.
 #include <iostream>
 
 #include "cpu.h"
@@ -5,6 +6,8 @@
 #include "op_codes.h"
 #include "test_utils.h"
 #include "types.h"
+
+using namespace colors;  // Make color codes more accessible
 
 namespace testing {
 void inline_lda_test(Cpu& cpu, Mem& mem) {
@@ -16,8 +19,11 @@ void inline_lda_test(Cpu& cpu, Mem& mem) {
 
     cpu.execute(2, mem);  // Execute with 2 cycles for LDA_IM
 
-    // Check result and print
-    std::printf("Accumulator after LDA_IM: 0x%02X\n", cpu.get(Register::A));
+    // Check result and print with color
+    std::printf("%sAccumulator after LDA_IM: 0x%02X%s\n", colors::CYAN, cpu.get(Register::A), colors::RESET);
+
+    // Print detailed CPU state
+    print_cpu_state(cpu);
 
     // Verify with test assertion
     if (cpu.get(Register::A) != 0xFF) {
@@ -57,8 +63,11 @@ void inline_jsr_rts_test(Cpu& cpu, Mem& mem) {
 
     cpu.execute(8, mem);  // increased cycle count to include RTS execution
 
-    // Print result
-    std::printf("Accumulator after JSR and RTS: 0x%02X\n", cpu.get(Register::A));
+    // Print result with color
+    std::printf("%sAccumulator after JSR and RTS: 0x%02X%s\n", colors::CYAN, cpu.get(Register::A), colors::RESET);
+
+    // Print detailed CPU state
+    print_cpu_state(cpu);
 
     // Verify results with test assertions
     if (cpu.get(Register::A) != 0x84) {
@@ -79,14 +88,12 @@ void inline_jsr_rts_test(Cpu& cpu, Mem& mem) {
 }
 
 // Run all tests and return true if all tests pass
-bool run_all_tests() {
+bool run_all_tests(Cpu& cpu, Mem& mem) {
     testing::TestSuite test_suite("6502 CPU Tests");
 
-    std::cout << "\n===== Running 6502 CPU Tests =====\n" << std::endl;
-
-    // Create fresh instances for each test
-    Cpu cpu;
-    Mem mem;
+    std::cout << "\n"
+              << colors::YELLOW << colors::BOLD << "===== Running 6502 CPU Tests =====" << colors::RESET << "\n"
+              << std::endl;
 
     // Register and run individual tests
     test_suite.register_test("Inline LDA Test", [&]() { inline_lda_test(cpu, mem); });

@@ -14,7 +14,7 @@ int main() {
     cpu.reset(mem);
 
 #if defined(__TESTING)
-    testing::run_all_tests();
+    return testing::run_all_tests(cpu, mem) ? 0 : 1;
 #else
     // Normal operation mode (not testing)
 
@@ -33,6 +33,6 @@ int main() {
     binary_reader::read_from_array(cpu, mem, demo);
 
     cpu.execute(8, mem);  // Execute with 100 cycles
-#endif
     return 0;
+#endif
 }

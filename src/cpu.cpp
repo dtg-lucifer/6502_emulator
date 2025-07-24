@@ -108,7 +108,8 @@ void Cpu::execute(u32 cycles, Mem& mem) {
                 cycles -= 2;  // Extra cycles for updating PC
             } break;
             default: {
-                std::cout << "Invalid op code: 0x" << std::hex << static_cast<int>(ins) << std::dec << " at address 0x" << std::hex << (PC - 1) << std::dec << std::endl;
+                std::cout << "Invalid op code: 0x" << std::hex << static_cast<int>(ins) << std::dec << " at address 0x"
+                          << std::hex << (PC - 1) << std::dec << std::endl;
             } break;
         }
     }
