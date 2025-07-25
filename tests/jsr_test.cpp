@@ -43,22 +43,22 @@ void inline_jsr_rts_test(Cpu& cpu, Mem& mem) {
 
     // Verify results with test assertions
     if (cpu.get(Register::A) != 0x84) {
-        throw testing::TestFailedException(">> JSR/RTS test failed: Accumulator should be 0x84");
+        throw testing::TestFailedException("JSR/RTS test failed: Accumulator should be 0x84");
     }
 
     // Verify stack pointer is restored to the initial value after JSR+RTS
     // Each JSR pushes 2 bytes (return address) and RTS pulls those 2 bytes
     if (cpu.SP != initial_sp) {
         std::stringstream ss;
-        ss << ">> JSR/RTS test failed: Stack pointer should be restored to 0x" << std::hex
-           << static_cast<int>(initial_sp) << " but was 0x" << static_cast<int>(cpu.SP);
+        ss << "JSR/RTS test failed: Stack pointer should be restored to 0x" << std::hex << static_cast<int>(initial_sp)
+           << " but was 0x" << static_cast<int>(cpu.SP);
         throw testing::TestFailedException(ss.str());
     }
 
     // Verify program counter is at the expected location
     if (cpu.PC != expected_pc) {
         std::stringstream ss;
-        ss << ">> JSR/RTS test failed: PC should be 0x" << std::hex << expected_pc << " but was 0x" << cpu.PC;
+        ss << "JSR/RTS test failed: PC should be 0x" << std::hex << expected_pc << " but was 0x" << cpu.PC;
         throw testing::TestFailedException(ss.str());
     }
 

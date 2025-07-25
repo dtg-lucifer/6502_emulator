@@ -41,6 +41,7 @@ if(ENABLE_TESTING)
     add_executable(emulator_test
         tests/main.cpp
         tests/index_test.cpp
+        tests/invalid_opcode_test.cpp
         tests/lda_test.cpp
         tests/jsr_test.cpp
     )

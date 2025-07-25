@@ -34,7 +34,8 @@ class TestFailedException : public std::exception {
 
    public:
     TestFailedException(const std::string& msg) : message(msg) {
-        colored_message = std::string(colors::RED) + std::string(colors::BOLD) + msg + std::string(colors::RESET);
+        colored_message =
+            std::string(colors::RED) + std::string(colors::BOLD) + ">> " + msg + std::string(colors::RESET);
     }
 
     const char* what() const noexcept override { return colored_message.c_str(); }

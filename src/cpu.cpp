@@ -66,23 +66,74 @@ i32 Cpu::execute(i32 cycles, Mem& mem, bool* completed_out) {
         switch (ins) {
             case op(Op::LDA_IM): {
                 byte v = fetch_byte(cycles, mem);  // Fetch the 2nd byte from the memory
-                                                   // as that is the value to be set
-                A = v;                             // Set the value to the accumulator register
-                LDA_SetFlags();                    // Set the Negative and zero flags
+                // as that is the value to be set
+                this->set(Register::A, v);  // Set the value to the A register
+                LDA_SetFlags();             // Set the Negative and zero flags
             } break;
             case op(Op::LDA_ZP): {
-                byte addr = fetch_byte(cycles, mem);  // Fetch the 2nd byte from the memory
-                                                      // as that is the address for the zero page
-                A = read_byte(addr, cycles, mem);     // Set the address to the A register
-                LDA_SetFlags();                       // Set the Negative and zero flags
+                byte addr = fetch_byte(cycles, mem);                   // Fetch the 2nd byte from the memory
+                                                                       // as that is the address for the zero page
+                this->set(Register::A, read_byte(addr, cycles, mem));  // Set the address to the A register
+                LDA_SetFlags();                                        // Set the Negative and zero flags
             } break;
             case op(Op::LDA_ZPX): {
                 byte addr = fetch_byte(cycles, mem);  // Fetch the 2nd byte from the memory
                                                       // as that is the address for the zero page
-                addr += X;
+                addr += this->get(Register::X);       // Add the X register value to the address
                 cycles--;
-                A = read_byte(addr, cycles, mem);
+                this->set(Register::A, read_byte(addr, cycles, mem));
                 LDA_SetFlags();
+            } break;
+            case op(Op::LDA_AB): {
+                word addr = fetch_word(cycles, mem);  // Fetch the 2nd and 3rd byte from the memory
+                                                      // as that is the absolute address
+                this->set(Register::A, mem[addr]);    // Set the value at the absolute address to the A register
+                cycles--;                             // Fetching the absolute address takes 1 cycle
+                LDA_SetFlags();                       // Set the Negative and zero flags
+            } break;
+            case op(Op::LDA_ABSX): {
+                word addr = fetch_word(cycles, mem);  // Fetch the 2nd and 3rd byte from the memory
+                                                      // as that is the absolute address
+                addr += this->get(Register::X);       // Add the X register value to the address
+                cycles--;                             // Fetching the absolute address takes 1 cycle
+                A = mem[addr];                        // Set the value at the absolute address to the A register
+                LDA_SetFlags();                       // Set the Negative and zero flags
+            } break;
+            case op(Op::LDA_ABSY): {
+                word addr = fetch_word(cycles, mem);  // Fetch the 2nd and 3rd byte from the memory
+                                                      // as that is the absolute address
+                addr += this->get(Register::Y);       // Add the Y register value to the
+                cycles--;                             // Fetching the absolute address takes 1 cycle
+                this->set(Register::A, mem[addr]);    // Set the value at the absolute address to the A register
+                LDA_SetFlags();                       // Set the Negative and zero flags
+            } break;
+            case op(Op::LDA_INX): {
+                byte addr = fetch_byte(cycles, mem);      // Fetch the 2nd byte from the memory
+                                                          // as that is the zero page address
+                addr += this->get(Register::X);           // Add the X register value to the
+                cycles--;                                 // Fetching the zero page address takes 1 cycle
+                byte low = mem[addr];                     // Low byte of the effective address
+                byte high = mem[addr + 1];                // High byte of the effective address
+                cycles -= 2;                              // Reading the effective address takes 2 cycles
+                word effective_addr = (high << 8) | low;  // Combine low and
+                this->set(Register::A,
+                          mem[effective_addr]);  // Set the value at the effective address to the A register
+                LDA_SetFlags();                  // Set the Negative and zero flags
+            } break;
+            case op(Op::LDA_INY): {
+                byte addr = fetch_byte(cycles, mem);  // Fetch zero page address
+                cycles--;                             // Fetching zero page address takes 1 cycle
+
+                // Read the 16-bit address from zero page, with wraparound
+                byte low = mem[addr];                // Low byte of the effective address
+                byte high = mem[(addr + 1) & 0xFF];  // High byte with zero-page wraparound
+                cycles -= 2;                         // Reading the effective address takes 2 cycles
+
+                word effective_addr = (high << 8) | low;   // Combine to form 16-bit address
+                effective_addr += this->get(Register::Y);  // Add Y register offset
+
+                this->set(Register::A, mem[effective_addr]);  // Load value into A
+                LDA_SetFlags();                               // Set the flags
             } break;
             case op(Op::JSR): {
                 word addr = fetch_word(cycles, mem);  // Get the absolute address (16bit)
