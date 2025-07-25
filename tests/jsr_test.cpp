@@ -9,8 +9,8 @@ namespace testing {
 void inline_jsr_rts_test(Cpu& cpu, Mem& mem) {
     cpu.reset(mem);
 
-    // Save the original stack pointer
-    byte original_sp = cpu.SP;
+    // After reset, SP should be 0xFF
+    byte initial_sp = cpu.SP;
 
     // start - inline test
     mem[0xFFFC] = op(Op::JSR);
@@ -28,29 +28,47 @@ void inline_jsr_rts_test(Cpu& cpu, Mem& mem) {
     // Save the program counter before execution
     word expected_pc = 0xFFFF;  // After JSR+RTS, PC should be at 0xFFFF
 
-    cpu.execute(8, mem);  // increased cycle count to include RTS execution
+    // Track exact number of cycles required for JSR + LDA + RTS
+    bool program_completed = false;
+    i32 cycles_used = cpu.execute(13, mem, &program_completed);  // Updated cycle count
+
+    // Print cycles used
+    std::printf("%s>> Execution completed in %d cycles%s\n", CYAN, cycles_used, RESET);
 
     // Print result with color
-    std::printf("%sAccumulator after JSR and RTS: 0x%02X%s\n", CYAN, cpu.get(Register::A), RESET);
+    std::printf("%s>> Accumulator after JSR and RTS: 0x%02X%s\n", CYAN, cpu.get(Register::A), RESET);
 
     // // Print detailed CPU state
     // print_cpu_state(cpu);
 
     // Verify results with test assertions
     if (cpu.get(Register::A) != 0x84) {
-        throw testing::TestFailedException("JSR/RTS test failed: Accumulator should be 0x84");
+        throw testing::TestFailedException(">> JSR/RTS test failed: Accumulator should be 0x84");
     }
 
-    // Verify stack pointer is restored
-    if (cpu.SP != original_sp) {
-        throw testing::TestFailedException("JSR/RTS test failed: Stack pointer not correctly restored");
+    // Verify stack pointer is restored to the initial value after JSR+RTS
+    // Each JSR pushes 2 bytes (return address) and RTS pulls those 2 bytes
+    if (cpu.SP != initial_sp) {
+        std::stringstream ss;
+        ss << ">> JSR/RTS test failed: Stack pointer should be restored to 0x" << std::hex
+           << static_cast<int>(initial_sp) << " but was 0x" << static_cast<int>(cpu.SP);
+        throw testing::TestFailedException(ss.str());
     }
 
     // Verify program counter is at the expected location
     if (cpu.PC != expected_pc) {
         std::stringstream ss;
-        ss << "JSR/RTS test failed: PC should be 0x" << std::hex << expected_pc << " but was 0x" << cpu.PC;
+        ss << ">> JSR/RTS test failed: PC should be 0x" << std::hex << expected_pc << " but was 0x" << cpu.PC;
         throw testing::TestFailedException(ss.str());
+    }
+
+    // Print the cycles used and completion status for diagnostics
+    std::cout << "JSR+LDA+RTS execution took " << cycles_used
+              << " cycles (Completed: " << (program_completed ? "Yes" : "No") << ")" << std::endl;
+
+    // Verify the program completed successfully
+    if (!program_completed) {
+        throw testing::TestFailedException("JSR/RTS test failed: Program did not complete successfully");
     }
 }
 }  // namespace testing

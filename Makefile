@@ -10,13 +10,17 @@ build:
 
 setup:
 	mkdir -p build && \
-		cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DENABLE_TESTING=OFF && \
+		cmake -S . -B build \
+		-DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+		-DENABLE_TESTING=OFF && \
         ln -sf build/compile_commands.json compile_commands.json
 .PHONY: setup
 
 setup-testing:
 	@mkdir -p build && \
-		cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DENABLE_TESTING=ON && \
+		cmake -S . -B build \
+		-DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+		-DENABLE_TESTING=ON && \
         ln -sf build/compile_commands.json compile_commands.json
 .PHONY: setup-testing
 

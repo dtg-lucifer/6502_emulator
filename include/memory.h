@@ -13,7 +13,7 @@ class Mem {
     void init();
 
     // Write a 16-bit word to memory (little-endian)
-    void write_word(u32& cycles, word value, u32 address);
+    void write_word(i32& cycles, word value, u32 address);
 
     // Memory access operators
     byte operator[](u32 addr) const;

@@ -6,6 +6,8 @@
 enum class Register : byte { A = 0, X = 1, Y = 2 };
 
 enum class Op : byte {
+    BRK = 0x00,      // Force Interrupt (Break)
+    NOP = 0xEA,      // No Operation
     LDA_IM = 0xA9,   // Load Accumulator Immediate
     LDA_ZP = 0xA5,   // Load Accumulator Zero Page
     LDA_ZPX = 0xB5,  // Load Accumulator Zero Page,X

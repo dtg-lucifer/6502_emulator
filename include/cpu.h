@@ -35,10 +35,13 @@ class Cpu {
 
     // CPU operations
     void reset(Mem& mem);
-    byte fetch_byte(u32& cycles, Mem& mem);
-    word fetch_word(u32& cycles, Mem& mem);
-    byte read_byte(byte zp_addr, u32& cycles, Mem& mem);
-    void execute(u32 cycles, Mem& mem);
+    byte fetch_byte(i32& cycles, Mem& mem);
+    word fetch_word(i32& cycles, Mem& mem);
+    byte read_byte(byte zp_addr, i32& cycles, Mem& mem);
+    // Execute CPU instructions for the given number of cycles
+    // Returns the number of cycles actually used
+    // Sets the completed flag to true if execution finished with RTS
+    i32 execute(i32 cycles, Mem& mem, bool* completed = nullptr);
 };
 
 #endif  // CPU_H

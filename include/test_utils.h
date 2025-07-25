@@ -92,6 +92,13 @@ class TestSuite {
         }
     }
 
+    void print_header() const {
+        std::cout << "\n"
+                  << colors::YELLOW << colors::BOLD << "===== Running " << this->suite_name
+                  << " Tests =====" << colors::RESET << "\n"
+                  << std::endl;
+    }
+
     // Print test suite results
     void print_results() const {
         std::cout << "\n"
