@@ -5,7 +5,6 @@
 #include "memory.h"
 #include "op_codes.h"
 #include "reader.h"
-#include "test.h"
 #include "types.h"
 
 int main() {
@@ -13,9 +12,6 @@ int main() {
     Mem mem;
     cpu.reset(mem);
 
-#if defined(__TESTING)
-    return testing::run_all_tests(cpu, mem) ? 0 : 1;
-#else
     // Normal operation mode (not testing)
 
     // Program flow:
@@ -32,7 +28,7 @@ int main() {
 
     binary_reader::read_from_array(cpu, mem, demo);
 
-    cpu.execute(8, mem);  // Execute with 100 cycles
+    cpu.execute(7, mem);
+
     return 0;
-#endif
 }

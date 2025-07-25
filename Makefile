@@ -29,7 +29,7 @@ run:
 .PHONY: run
 
 test: setup-testing build
-	./build/bin/6502_cpu_emulator
+	./build/bin/emulator_test
 .PHONY: test
 
 debug-test: setup-testing build

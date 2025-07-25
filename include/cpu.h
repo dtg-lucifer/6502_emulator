@@ -11,9 +11,8 @@ class Cpu {
     byte registers[3];  // Index registers
 
    public:
-    word PC;                   // Program counter register
-    byte SP;                   // Stack pointer register (8-bit)
-    word stack_base = 0x0100;  // Base address for the stack (page 1)
+    word PC;  // Program counter register
+    byte SP;  // Stack pointer register (8-bit)
 
     // Register references for easier access
     byte& A = registers[static_cast<byte>(Register::A)];
@@ -21,14 +20,14 @@ class Cpu {
     byte& Y = registers[static_cast<byte>(Register::Y)];
 
     // Status flags
-    byte C : 1;  // Carry Flag
-    byte Z : 1;  // Zero Flag
-    byte I : 1;  // Interrupt Disable Flag
-    byte D : 1;  // Decimal Mode Flag
-    byte B : 1;  // Break Flag
-    byte V : 1;  // Overflow Flag
-    byte N : 1;  // Negative Flag
-    byte U : 1;  // The 8th bit (unused/expansion)
+    byte N : 1;  // Negative Flag (bit 7)
+    byte V : 1;  // Overflow Flag (bit 6)
+    byte U : 1;  // Unused/expansion (bit 5)
+    byte B : 1;  // Break Flag (bit 4)
+    byte D : 1;  // Decimal Mode Flag (bit 3)
+    byte I : 1;  // Interrupt Disable Flag (bit 2)
+    byte Z : 1;  // Zero Flag (bit 1)
+    byte C : 1;  // Carry Flag (bit 0)
 
     // Register access methods
     byte& get(const Register r);
