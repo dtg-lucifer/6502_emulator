@@ -60,9 +60,39 @@ i32 Cpu::execute(i32 cycles, Mem& mem, bool* completed_out) {
     bool completed = false;
     bool ran_instructions = false;
 
+    // Ask the user to provide whether the execution mode will be
+    // automatic or manual stepping
+    //
+    // in automatic mode the execution will be done without any intervention
+    // in manual mode use will have to press enter or yes to continue execution
+    // or enter s/state/STATE/S to see the cpu state at that point
+    // in manual mode the user can also enter 'q' to quit the execution
+
+    // ask the user for input
+    std::cout << colors::BOLD << colors::BLUE << "Please select the execution mode from below:\n";
+    std::cout << colors::GREEN << "1. Automatic execution (default)\n";
+    std::cout << "2. Manual stepping (press Enter to continue, 's' to see state, 'q' to quit)\n";
+    std::cout << "Enter your choice (1 or 2): ";
+    std::cout << colors::RESET;
+    std::string choice;
+    std::getline(std::cin, choice);
+
+    // Determine execution mode based on user input
+    bool manual_mode = false;
+    if (choice == "2") {
+        manual_mode = true;
+        std::cout << colors::BOLD << colors::BLUE << "Manual stepping mode enabled. ";
+        std::cout << "Press Enter to step, 's' to view state, 'q' to quit.\n" << colors::RESET;
+    } else {
+        std::cout << colors::BOLD << colors::BLUE << "Automatic execution mode enabled.\n" << colors::RESET;
+    }
+
     while (cycles > 0) {
         word inst = mem[PC];                              // Store the current instruction address for printing
         this->print_current_execution(inst, *this, mem);  // Print the current execution state
+
+        // Handle manual stepping mode
+        this->cpu_mode_decider(manual_mode, cycles, starting_cycles, mem);
 
         byte ins = fetch_byte(cycles, mem);
         ran_instructions = true;
@@ -130,6 +160,14 @@ i32 Cpu::execute(i32 cycles, Mem& mem, bool* completed_out) {
         std::cout << "\tRequired: > " << starting_cycles << " cycles" << std::endl;
         std::cout << "\tProvided: " << starting_cycles << " cycles" << std::endl;
         std::cout << "\tUsed: " << starting_cycles - cycles << " cycles" << std::endl;
+    }
+
+    // Show final execution status
+    if (manual_mode) {
+        std::cout << colors::BOLD << colors::BLUE << "Execution " << (completed ? colors::GREEN : colors::RED)
+                  << (completed ? "completed" : "incomplete") << colors::BLUE << " after " << (starting_cycles - cycles)
+                  << " cycles.\n"
+                  << colors::RESET;
     }
 
     // If caller wants to know completion status

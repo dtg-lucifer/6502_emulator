@@ -47,11 +47,51 @@ class Cpu {
     // Sets the completed flag to true if execution finished with RTS
     i32 execute(i32 cycles, Mem& mem, bool* completed = nullptr);
 
+    i32 cpu_mode_decider(bool manual_mode, i32& cycles, i32 starting_cycles, Mem& mem, bool* completed_out = nullptr) {
+        if (manual_mode) {
+            while (true) {
+                std::cout << colors::YELLOW << "[Step: Enter/s/q]: " << colors::RESET;
+                std::string input;
+                std::getline(std::cin, input);
+
+                // Convert input to lowercase for case-insensitive comparison
+                for (auto& c : input) {
+                    c = std::tolower(c);
+                }
+
+                if (input.empty() || input == "y" || input == "yes") {
+                    // Continue execution - just break from this loop
+                    break;
+                } else if (input == "s" || input == "state") {
+                    // Show CPU state without advancing
+                    print_state(starting_cycles - cycles, false);
+                    continue;
+                } else if (input == "q" || input == "quit") {
+                    // Quit execution
+                    std::cout << colors::BOLD << colors::BLUE << "Execution terminated by user.\n" << colors::RESET;
+
+                    // If caller wants to know completion status
+                    if (completed_out != nullptr) {
+                        *completed_out = false;
+                    }
+
+                    // Return the number of cycles actually used
+                    return starting_cycles - cycles;
+                } else {
+                    std::cout << colors::RED << "Invalid input. Press Enter to continue, 's' for state, 'q' to quit.\n"
+                              << colors::RESET;
+                    continue;
+                }
+            }
+        }
+        return 0;
+    }
+
     void print_current_execution(word ins, Cpu& cpu, Mem& mem) {
         word operand_word = static_cast<word>(mem[PC]) | (static_cast<word>(mem[PC + 1]) << 8);
 
         std::cout << colors::BOLD << colors::BLUE;
-        std::cout << "0x" << std::setfill('0') << std::setw(4) << std::hex << (PC - 1) << ": ";
+        std::cout << "0x" << std::setfill('0') << std::setw(4) << std::hex << (PC) << ": ";
         std::cout << colors::GREEN << "sp = 0x01" << std::setfill('0') << std::setw(2) << std::hex
                   << static_cast<int>(SP) << "  ";
         std::cout << "pc = 0x" << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(PC) << "  ";
