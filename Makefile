@@ -2,14 +2,13 @@ all: setup build run
 .PHONY: all
 
 build:
-	@cmake --build build \
-	    -- \
+	@make -C build \
 		-j 12 \
-		--no-print-directory
+        --no-print-directory
 .PHONY: build
 
 setup:
-	mkdir -p build && \
+	@mkdir -p build && \
 		cmake -S . -B build \
 		-DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
 		-DENABLE_TESTING=OFF && \

@@ -1,5 +1,7 @@
 #include "cpu.h"
 
+#include <iomanip>
+#include <ios>
 #include <iostream>
 
 #include "instructions.h"
@@ -64,6 +66,17 @@ i32 Cpu::execute(i32 cycles, Mem& mem, bool* completed_out) {
         byte ins = fetch_byte(cycles, mem);
         ran_instructions = true;
 
+        word operand_word = static_cast<word>(mem[PC]) | (static_cast<word>(mem[PC + 1]) << 8);
+
+        std::cout << colors::BOLD << colors::CYAN;
+        std::cout << "0x" << std::setfill('0') << std::setw(4) << std::hex << (PC - 1) << ": ";
+        std::cout << "ins = 0x" << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(ins);
+        std::cout << " (" << opcodes::from_byte(ins) << ")";
+        std::cout << " [operand(next 16-bit) = 0x" << std::setfill('0') << std::setw(4) << std::hex << operand_word
+                  << "]";
+        std::cout << colors::RESET << std::endl;
+        std::cout << std::dec;  // Ensure we print in decimal mode for the rest of the output
+
         switch (ins) {
             case op(Op::LDA_IM):
                 instructions::LDA_IM(*this, cycles, mem);
@@ -123,16 +136,19 @@ i32 Cpu::execute(i32 cycles, Mem& mem, bool* completed_out) {
     // If we ran out of cycles before completion
     if (!completed && cycles <= 0) {
         std::cout << colors::BOLD << colors::RED << "Warning:" << colors::RESET
-                  << " Insufficient cycles. Execution incomplete." << std::endl;
-        std::cout << "  Required: > " << starting_cycles << " cycles" << std::endl;
-        std::cout << "  Provided: " << starting_cycles << " cycles" << std::endl;
-        std::cout << "  Used: " << starting_cycles - cycles << " cycles" << std::endl;
+                  << "\tInsufficient cycles. Execution incomplete." << std::endl;
+        std::cout << "\tRequired: > " << starting_cycles << " cycles" << std::endl;
+        std::cout << "\tProvided: " << starting_cycles << " cycles" << std::endl;
+        std::cout << "\tUsed: " << starting_cycles - cycles << " cycles" << std::endl;
     }
 
     // If caller wants to know completion status
     if (completed_out != nullptr) {
         *completed_out = completed;
     }
+
+    // Reset output to decimal mode for subsequent displays
+    std::cout << std::dec;
 
     // Return the number of cycles actually used
     return starting_cycles - cycles;

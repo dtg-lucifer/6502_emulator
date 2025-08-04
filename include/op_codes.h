@@ -1,6 +1,8 @@
 #ifndef OP_CODES_H
 #define OP_CODES_H
 
+#include <string>
+
 #include "types.h"
 
 enum class Register : byte { A = 0, X = 1, Y = 2 };
@@ -24,5 +26,9 @@ enum class Op : byte {
 constexpr byte op(const Op o) {
     return static_cast<byte>(o);
 }
+
+namespace opcodes {
+std::string from_byte(byte opcode);
+}  // namespace opcodes
 
 #endif  // OP_CODES_H

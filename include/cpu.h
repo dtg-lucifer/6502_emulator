@@ -1,6 +1,9 @@
 #ifndef CPU_H
 #define CPU_H
 
+#include <iomanip>
+#include <iostream>
+
 #include "memory.h"
 #include "op_codes.h"
 #include "types.h"
@@ -42,6 +45,40 @@ class Cpu {
     // Returns the number of cycles actually used
     // Sets the completed flag to true if execution finished with RTS
     i32 execute(i32 cycles, Mem& mem, bool* completed = nullptr);
+
+    void print_state() const {
+        // Save the current cout formatting state
+        auto flags = std::cout.flags();
+
+        // Create a nicer formatted output with borders and aligned values
+        std::cout << "\n┌─────────────── CPU STATE ───────────────────┐\n";
+
+        // Register section
+        std::cout << "│ PC (16-bit): 0x" << std::setw(4) << std::setfill('0') << std::hex << PC << " -- "
+                  << "SP (8-bit): 0x" << std::setw(4) << std::setfill('0') << std::hex << static_cast<int>(SP)
+                  << "   │\n";
+
+        std::cout << "├─────────────────────────────────────────────┤\n";
+
+        // Display A, X, Y registers with both hex and decimal values
+        std::cout << "│ A: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(A) << " ("
+                  << std::setw(3) << std::setfill(' ') << std::dec << static_cast<int>(A) << ")";
+        std::cout << "  X: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(X) << " ("
+                  << std::setw(3) << std::setfill(' ') << std::dec << static_cast<int>(X) << ")";
+        std::cout << "  Y: 0x" << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(Y) << " ("
+                  << std::setw(3) << std::setfill(' ') << std::dec << static_cast<int>(Y) << ") │\n";
+
+        // Status flags section
+        std::cout << "├────────────── STATUS FLAGS ─────────────────┤\n";
+        std::cout << "│  N   V   U   B   D   I   Z   C              │\n";
+        std::cout << "│  " << static_cast<int>(N) << "   " << static_cast<int>(V) << "   " << static_cast<int>(U)
+                  << "   " << static_cast<int>(B) << "   " << static_cast<int>(D) << "   " << static_cast<int>(I)
+                  << "   " << static_cast<int>(Z) << "   " << static_cast<int>(C) << "              │\n";
+        std::cout << "└─────────────────────────────────────────────┘\n";
+
+        // Restore the original cout formatting state
+        std::cout.flags(flags);
+    }
 };
 
 #endif  // CPU_H

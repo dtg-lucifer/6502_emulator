@@ -23,6 +23,7 @@ add_library(emulator_core
     src/memory.cpp
     src/types.cpp
     src/reader.cpp
+    src/op_codes.cpp
     src/instructions/lda.cpp
     src/instructions/jsr.cpp
     src/instructions/rts.cpp
