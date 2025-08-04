@@ -12,7 +12,8 @@
 class Cpu {
    private:
     void LDA_SetFlags();
-    byte registers[3];  // Index registers
+    byte registers[3];          // Index registers
+    i32 ABORT_STATUS = -99999;  // Special status for aborting execution
 
    public:
     word PC;  // Program counter register
@@ -76,7 +77,7 @@ class Cpu {
                     }
 
                     // Return the number of cycles actually used
-                    return starting_cycles - cycles;
+                    return ABORT_STATUS;
                 } else {
                     std::cout << colors::RED << "Invalid input. Press Enter to continue, 's' for state, 'q' to quit.\n"
                               << colors::RESET;
@@ -84,7 +85,7 @@ class Cpu {
                 }
             }
         }
-        return 0;
+        return starting_cycles - cycles;
     }
 
     void print_current_execution(word ins, Cpu& cpu, Mem& mem) {

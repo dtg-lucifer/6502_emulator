@@ -92,7 +92,10 @@ i32 Cpu::execute(i32 cycles, Mem& mem, bool* completed_out) {
         this->print_current_execution(inst, *this, mem);  // Print the current execution state
 
         // Handle manual stepping mode
-        this->cpu_mode_decider(manual_mode, cycles, starting_cycles, mem);
+        int r = this->cpu_mode_decider(manual_mode, cycles, starting_cycles, mem);
+        if (r == this->ABORT_STATUS) {
+            break;
+        }
 
         byte ins = fetch_byte(cycles, mem);
         ran_instructions = true;
