@@ -6,7 +6,6 @@
 #include "memory.h"
 #include "op_codes.h"
 #include "reader.h"
-#include "test_utils.h"
 #include "types.h"
 
 using namespace colors;
@@ -101,10 +100,6 @@ int main() {
     bool program_completed = false;
     i32 cycles_used = cpu.execute(100, mem, &program_completed);  // Execute the program with a limit of 100 cycles
 
-    std::cout << "Execution " << BOLD << (program_completed ? GREEN : RED)
-              << (program_completed ? "COMPLETED" : "INCOMPLETE") << RESET << " using " << cycles_used << " cycles"
-              << std::endl;
-
-    cpu.print_state();
+    cpu.print_state(cycles_used, program_completed);
     return 0;
 }

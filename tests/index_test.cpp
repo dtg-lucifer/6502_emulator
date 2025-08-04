@@ -49,6 +49,7 @@ bool run_all_tests(Cpu& cpu, Mem& mem) {
 
     // Return true if all tests passed
     int failed_count = test_suite_lda.get_failed_count() + test_suite_jsr_rts.get_failed_count();
+
     return failed_count == 0;
 }
 }  // namespace testing

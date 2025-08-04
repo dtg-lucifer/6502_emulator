@@ -1,12 +1,10 @@
 #include "cpu.h"
 
-#include <iomanip>
 #include <ios>
 #include <iostream>
 
 #include "instructions.h"
 #include "op_codes.h"
-#include "test_utils.h"
 
 void Cpu::LDA_SetFlags() {
     Z = (A == 0);              // Set the Zero flag
@@ -63,19 +61,11 @@ i32 Cpu::execute(i32 cycles, Mem& mem, bool* completed_out) {
     bool ran_instructions = false;
 
     while (cycles > 0) {
+        word inst = mem[PC];                              // Store the current instruction address for printing
+        this->print_current_execution(inst, *this, mem);  // Print the current execution state
+
         byte ins = fetch_byte(cycles, mem);
         ran_instructions = true;
-
-        word operand_word = static_cast<word>(mem[PC]) | (static_cast<word>(mem[PC + 1]) << 8);
-
-        std::cout << colors::BOLD << colors::CYAN;
-        std::cout << "0x" << std::setfill('0') << std::setw(4) << std::hex << (PC - 1) << ": ";
-        std::cout << "ins = 0x" << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(ins);
-        std::cout << " (" << opcodes::from_byte(ins) << ")";
-        std::cout << " [operand(next 16-bit) = 0x" << std::setfill('0') << std::setw(4) << std::hex << operand_word
-                  << "]";
-        std::cout << colors::RESET << std::endl;
-        std::cout << std::dec;  // Ensure we print in decimal mode for the rest of the output
 
         switch (ins) {
             case op(Op::LDA_IM):
@@ -134,7 +124,7 @@ i32 Cpu::execute(i32 cycles, Mem& mem, bool* completed_out) {
     }
 
     // If we ran out of cycles before completion
-    if (!completed && cycles <= 0) {
+    if (!completed && cycles < 0) {
         std::cout << colors::BOLD << colors::RED << "Warning:" << colors::RESET
                   << "\tInsufficient cycles. Execution incomplete." << std::endl;
         std::cout << "\tRequired: > " << starting_cycles << " cycles" << std::endl;

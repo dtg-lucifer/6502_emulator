@@ -1,8 +1,8 @@
-all: setup build run
+all: build run
 .PHONY: all
 
 build:
-	@make -C build \
+	@$(MAKE) -C build \
 		-j 12 \
         --no-print-directory
 .PHONY: build
