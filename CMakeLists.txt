@@ -30,6 +30,9 @@ add_library(emulator_core
     src/instructions/ldy.cpp
     src/instructions/jsr.cpp
     src/instructions/rts.cpp
+    src/instructions/sta.cpp
+    src/instructions/stx.cpp
+    src/instructions/sty.cpp
 )
 
 # Make includes available to any target linking against emulator_core
@@ -53,6 +56,9 @@ if(ENABLE_TESTING)
         tests/ldx_test.cpp
         tests/ldy_test.cpp
         tests/jsr_test.cpp
+        tests/sta_test.cpp
+        tests/stx_test.cpp
+        tests/sty_test.cpp
     )
 
     # Link the test executable with the core library

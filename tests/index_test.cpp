@@ -77,10 +77,52 @@ bool run_all_tests(Cpu& cpu, Mem& mem) {
     // Print the results
     test_suite_ldy.print_results();
 
+    // Add new test suites for STA, STX, and STY
+    testing::TestSuite test_suite_sta("STA Op Code");
+    test_suite_sta.print_header();
+
+    // Register STA tests
+    test_suite_sta.register_test("Inline STA Zero Page Test", [&]() { inline_sta_zp_test(cpu, mem); });
+    test_suite_sta.register_test("Inline STA Zero Page,X Test", [&]() { inline_sta_zpx_test(cpu, mem); });
+    test_suite_sta.register_test("Inline STA Zero Page,X (Wrapping) Test",
+                                 [&]() { inline_sta_zpx_wrap_test(cpu, mem); });
+    test_suite_sta.register_test("Inline STA Absolute Test", [&]() { inline_sta_absolute_test(cpu, mem); });
+    test_suite_sta.register_test("Inline STA Absolute,X Test", [&]() { inline_sta_absx_test(cpu, mem); });
+    test_suite_sta.register_test("Inline STA Absolute,Y Test", [&]() { inline_sta_absy_test(cpu, mem); });
+    test_suite_sta.register_test("Inline STA Indirect,X Test", [&]() { inline_sta_indx_test(cpu, mem); });
+    test_suite_sta.register_test("Inline STA Indirect,Y Test", [&]() { inline_sta_indy_test(cpu, mem); });
+
+    test_suite_sta.print_results();
+
+    testing::TestSuite test_suite_stx("STX Op Code");
+    test_suite_stx.print_header();
+
+    // Register STX tests
+    test_suite_stx.register_test("Inline STX Zero Page Test", [&]() { inline_stx_zp_test(cpu, mem); });
+    test_suite_stx.register_test("Inline STX Zero Page,Y Test", [&]() { inline_stx_zpy_test(cpu, mem); });
+    test_suite_stx.register_test("Inline STX Zero Page,Y (Wrapping) Test",
+                                 [&]() { inline_stx_zpy_wrap_test(cpu, mem); });
+    test_suite_stx.register_test("Inline STX Absolute Test", [&]() { inline_stx_absolute_test(cpu, mem); });
+
+    test_suite_stx.print_results();
+
+    testing::TestSuite test_suite_sty("STY Op Code");
+    test_suite_sty.print_header();
+
+    // Register STY tests
+    test_suite_sty.register_test("Inline STY Zero Page Test", [&]() { inline_sty_zp_test(cpu, mem); });
+    test_suite_sty.register_test("Inline STY Zero Page,X Test", [&]() { inline_sty_zpx_test(cpu, mem); });
+    test_suite_sty.register_test("Inline STY Zero Page,X (Wrapping) Test",
+                                 [&]() { inline_sty_zpx_wrap_test(cpu, mem); });
+    test_suite_sty.register_test("Inline STY Absolute Test", [&]() { inline_sty_absolute_test(cpu, mem); });
+
+    test_suite_sty.print_results();
+
     // Return true if all tests passed
     int failed_count = test_suite_lda.get_failed_count() + test_suite_jsr_rts.get_failed_count() +
                        test_suite_invalid_opcode.get_failed_count() + test_suite_ldx.get_failed_count() +
-                       test_suite_ldy.get_failed_count();
+                       test_suite_ldy.get_failed_count() + test_suite_sta.get_failed_count() +
+                       test_suite_stx.get_failed_count() + test_suite_sty.get_failed_count();
 
     return failed_count == 0;
 }

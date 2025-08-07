@@ -31,6 +31,25 @@ void LDY_ZPX(Cpu& cpu, i32& cycles, Mem& mem);
 void LDY_AB(Cpu& cpu, i32& cycles, Mem& mem);
 void LDY_ABSX(Cpu& cpu, i32& cycles, Mem& mem);
 
+// STA Instructions
+void STA_ZP(Cpu& cpu, i32& cycles, Mem& mem);
+void STA_ZPX(Cpu& cpu, i32& cycles, Mem& mem);
+void STA_ABS(Cpu& cpu, i32& cycles, Mem& mem);
+void STA_ABSX(Cpu& cpu, i32& cycles, Mem& mem);
+void STA_ABSY(Cpu& cpu, i32& cycles, Mem& mem);
+void STA_INX(Cpu& cpu, i32& cycles, Mem& mem);
+void STA_INY(Cpu& cpu, i32& cycles, Mem& mem);
+
+// STX Instructions
+void STX_ZP(Cpu& cpu, i32& cycles, Mem& mem);
+void STX_ZPY(Cpu& cpu, i32& cycles, Mem& mem);
+void STX_ABS(Cpu& cpu, i32& cycles, Mem& mem);
+
+// STY Instructions
+void STY_ZP(Cpu& cpu, i32& cycles, Mem& mem);
+void STY_ZPX(Cpu& cpu, i32& cycles, Mem& mem);
+void STY_ABS(Cpu& cpu, i32& cycles, Mem& mem);
+
 // JSR Instruction
 void JSR(Cpu& cpu, i32& cycles, Mem& mem);
 

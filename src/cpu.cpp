@@ -65,32 +65,32 @@ i32 Cpu::execute(i32 cycles, Mem& mem, bool* completed_out, bool testing_env) {
     bool manual_mode = false;
 
     // Skip the user prompt if we're in testing mode
-    if (!testing_env) {
-        // Ask the user to provide whether the execution mode will be
-        // automatic or manual stepping
-        //
-        // in automatic mode the execution will be done without any intervention
-        // in manual mode use will have to press enter or yes to continue execution
-        // or enter s/state/STATE/S to see the cpu state at that point
-        // in manual mode the user can also enter 'q' to quit the execution
+#ifndef __TESTING
+    // Ask the user to provide whether the execution mode will be
+    // automatic or manual stepping
+    //
+    // in automatic mode the execution will be done without any intervention
+    // in manual mode use will have to press enter or yes to continue execution
+    // or enter s/state/STATE/S to see the cpu state at that point
+    // in manual mode the user can also enter 'q' to quit the execution
 
-        // ask the user for input
-        std::cout << colors::BOLD << colors::BLUE << "Please select the execution mode from below:\n";
-        std::cout << colors::GREEN << "1. Automatic execution (default)\n";
-        std::cout << "2. Manual stepping (press Enter to continue, 's' to see state, 'q' to quit)\n";
-        std::cout << "Enter your choice (1 or 2): ";
-        std::cout << colors::RESET;
-        std::string choice;
-        std::getline(std::cin, choice);
+    // ask the user for input
+    std::cout << colors::BOLD << colors::BLUE << "Please select the execution mode from below:\n";
+    std::cout << colors::GREEN << "1. Automatic execution (default)\n";
+    std::cout << "2. Manual stepping (press Enter to continue, 's' to see state, 'q' to quit)\n";
+    std::cout << "Enter your choice (1 or 2): ";
+    std::cout << colors::RESET;
+    std::string choice;
+    std::getline(std::cin, choice);
 
-        if (choice == "2") {
-            manual_mode = true;
-            std::cout << colors::BOLD << colors::BLUE << "Manual stepping mode enabled. ";
-            std::cout << "Press Enter to step, 's' to view state, 'q' to quit.\n" << colors::RESET;
-        } else {
-            std::cout << colors::BOLD << colors::BLUE << "Automatic execution mode enabled.\n" << colors::RESET;
-        }
+    if (choice == "2") {
+        manual_mode = true;
+        std::cout << colors::BOLD << colors::BLUE << "Manual stepping mode enabled. ";
+        std::cout << "Press Enter to step, 's' to view state, 'q' to quit.\n" << colors::RESET;
+    } else {
+        std::cout << colors::BOLD << colors::BLUE << "Automatic execution mode enabled.\n" << colors::RESET;
     }
+#endif
 
     while (cycles > 0) {
         word inst = mem[PC];  // Store the current instruction address for printing
@@ -110,6 +110,8 @@ i32 Cpu::execute(i32 cycles, Mem& mem, bool* completed_out, bool testing_env) {
         ran_instructions = true;
 
         switch (ins) {
+            // -------------------------------------------------
+            // LDA instructions
             case op(Op::LDA_IM):
                 instructions::LDA_IM(*this, cycles, mem);
                 break;
@@ -134,7 +136,7 @@ i32 Cpu::execute(i32 cycles, Mem& mem, bool* completed_out, bool testing_env) {
             case op(Op::LDA_INY):
                 instructions::LDA_INY(*this, cycles, mem);
                 break;
-
+            // -------------------------------------------------
             // LDX instructions
             case op(Op::LDX_IM):
                 instructions::LDX_IM(*this, cycles, mem);
@@ -151,7 +153,7 @@ i32 Cpu::execute(i32 cycles, Mem& mem, bool* completed_out, bool testing_env) {
             case op(Op::LDX_ABSY):
                 instructions::LDX_ABSY(*this, cycles, mem);
                 break;
-
+            // -------------------------------------------------
             // LDY instructions
             case op(Op::LDY_IM):
                 instructions::LDY_IM(*this, cycles, mem);
@@ -168,7 +170,53 @@ i32 Cpu::execute(i32 cycles, Mem& mem, bool* completed_out, bool testing_env) {
             case op(Op::LDY_ABSX):
                 instructions::LDY_ABSX(*this, cycles, mem);
                 break;
-
+            // -------------------------------------------------
+            // STA instructions
+            case op(Op::STA_ZP):
+                instructions::STA_ZP(*this, cycles, mem);
+                break;
+            case op(Op::STA_ZPX):
+                instructions::STA_ZPX(*this, cycles, mem);
+                break;
+            case op(Op::STA_ABS):
+                instructions::STA_ABS(*this, cycles, mem);
+                break;
+            case op(Op::STA_ABSX):
+                instructions::STA_ABSX(*this, cycles, mem);
+                break;
+            case op(Op::STA_ABSY):
+                instructions::STA_ABSY(*this, cycles, mem);
+                break;
+            case op(Op::STA_INX):
+                instructions::STA_INX(*this, cycles, mem);
+                break;
+            case op(Op::STA_INY):
+                instructions::STA_INY(*this, cycles, mem);
+                break;
+            // -------------------------------------------------
+            // STX Instructions
+            case op(Op::STX_ZP):
+                instructions::STX_ZP(*this, cycles, mem);
+                break;
+            case op(Op::STX_ZPY):
+                instructions::STX_ZPY(*this, cycles, mem);
+                break;
+            case op(Op::STX_ABS):
+                instructions::STX_ABS(*this, cycles, mem);
+                break;
+            // -------------------------------------------------
+            // STY Instructions
+            case op(Op::STY_ZP):
+                instructions::STY_ZP(*this, cycles, mem);
+                break;
+            case op(Op::STY_ZPX):
+                instructions::STY_ZPX(*this, cycles, mem);
+                break;
+            case op(Op::STY_ABS):
+                instructions::STY_ABS(*this, cycles, mem);
+                break;
+            // -------------------------------------------------
+            // Control FLOW and Miscellaneous
             case op(Op::JSR):
                 instructions::JSR(*this, cycles, mem);
                 break;
@@ -224,9 +272,9 @@ i32 Cpu::execute(i32 cycles, Mem& mem, bool* completed_out, bool testing_env) {
     }
 
     // Reset output to decimal mode for subsequent displays if not in testing mode
-    if (!testing_env) {
-        std::cout << std::dec;
-    }
+#ifndef __TESTING
+    std::cout << std::dec;
+#endif
 
     // Return the number of cycles actually used
     return starting_cycles - cycles;
