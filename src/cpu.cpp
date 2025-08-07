@@ -1,5 +1,6 @@
 #include "cpu.h"
 
+#include <iomanip>
 #include <ios>
 #include <iostream>
 
@@ -55,46 +56,54 @@ byte Cpu::read_byte(byte zp_addr, i32& cycles, Mem& mem) {
     return d;
 }
 
-i32 Cpu::execute(i32 cycles, Mem& mem, bool* completed_out) {
+i32 Cpu::execute(i32 cycles, Mem& mem, bool* completed_out, bool testing_env) {
     i32 starting_cycles = cycles;
     bool completed = false;
     bool ran_instructions = false;
 
-    // Ask the user to provide whether the execution mode will be
-    // automatic or manual stepping
-    //
-    // in automatic mode the execution will be done without any intervention
-    // in manual mode use will have to press enter or yes to continue execution
-    // or enter s/state/STATE/S to see the cpu state at that point
-    // in manual mode the user can also enter 'q' to quit the execution
-
-    // ask the user for input
-    std::cout << colors::BOLD << colors::BLUE << "Please select the execution mode from below:\n";
-    std::cout << colors::GREEN << "1. Automatic execution (default)\n";
-    std::cout << "2. Manual stepping (press Enter to continue, 's' to see state, 'q' to quit)\n";
-    std::cout << "Enter your choice (1 or 2): ";
-    std::cout << colors::RESET;
-    std::string choice;
-    std::getline(std::cin, choice);
-
-    // Determine execution mode based on user input
+    // Determine execution mode based on environment
     bool manual_mode = false;
-    if (choice == "2") {
-        manual_mode = true;
-        std::cout << colors::BOLD << colors::BLUE << "Manual stepping mode enabled. ";
-        std::cout << "Press Enter to step, 's' to view state, 'q' to quit.\n" << colors::RESET;
-    } else {
-        std::cout << colors::BOLD << colors::BLUE << "Automatic execution mode enabled.\n" << colors::RESET;
+
+    // Skip the user prompt if we're in testing mode
+    if (!testing_env) {
+        // Ask the user to provide whether the execution mode will be
+        // automatic or manual stepping
+        //
+        // in automatic mode the execution will be done without any intervention
+        // in manual mode use will have to press enter or yes to continue execution
+        // or enter s/state/STATE/S to see the cpu state at that point
+        // in manual mode the user can also enter 'q' to quit the execution
+
+        // ask the user for input
+        std::cout << colors::BOLD << colors::BLUE << "Please select the execution mode from below:\n";
+        std::cout << colors::GREEN << "1. Automatic execution (default)\n";
+        std::cout << "2. Manual stepping (press Enter to continue, 's' to see state, 'q' to quit)\n";
+        std::cout << "Enter your choice (1 or 2): ";
+        std::cout << colors::RESET;
+        std::string choice;
+        std::getline(std::cin, choice);
+
+        if (choice == "2") {
+            manual_mode = true;
+            std::cout << colors::BOLD << colors::BLUE << "Manual stepping mode enabled. ";
+            std::cout << "Press Enter to step, 's' to view state, 'q' to quit.\n" << colors::RESET;
+        } else {
+            std::cout << colors::BOLD << colors::BLUE << "Automatic execution mode enabled.\n" << colors::RESET;
+        }
     }
 
     while (cycles > 0) {
-        word inst = mem[PC];                              // Store the current instruction address for printing
-        this->print_current_execution(inst, *this, mem);  // Print the current execution state
+        word inst = mem[PC];  // Store the current instruction address for printing
 
-        // Handle manual stepping mode
-        int r = this->cpu_mode_decider(manual_mode, cycles, starting_cycles, mem);
-        if (r == this->ABORT_STATUS) {
-            break;
+        // Print execution state if not in testing mode
+        this->print_current_execution(inst, *this, mem, testing_env);
+
+        // Handle manual stepping mode if not in testing mode
+        if (!testing_env && manual_mode) {
+            int r = this->cpu_mode_decider(manual_mode, cycles, starting_cycles, mem);
+            if (r == this->ABORT_STATUS) {
+                return this->ABORT_STATUS;
+            }
         }
 
         byte ins = fetch_byte(cycles, mem);
@@ -125,6 +134,41 @@ i32 Cpu::execute(i32 cycles, Mem& mem, bool* completed_out) {
             case op(Op::LDA_INY):
                 instructions::LDA_INY(*this, cycles, mem);
                 break;
+
+            // LDX instructions
+            case op(Op::LDX_IM):
+                instructions::LDX_IM(*this, cycles, mem);
+                break;
+            case op(Op::LDX_ZP):
+                instructions::LDX_ZP(*this, cycles, mem);
+                break;
+            case op(Op::LDX_ZPY):
+                instructions::LDX_ZPY(*this, cycles, mem);
+                break;
+            case op(Op::LDX_AB):
+                instructions::LDX_AB(*this, cycles, mem);
+                break;
+            case op(Op::LDX_ABSY):
+                instructions::LDX_ABSY(*this, cycles, mem);
+                break;
+
+            // LDY instructions
+            case op(Op::LDY_IM):
+                instructions::LDY_IM(*this, cycles, mem);
+                break;
+            case op(Op::LDY_ZP):
+                instructions::LDY_ZP(*this, cycles, mem);
+                break;
+            case op(Op::LDY_ZPX):
+                instructions::LDY_ZPX(*this, cycles, mem);
+                break;
+            case op(Op::LDY_AB):
+                instructions::LDY_AB(*this, cycles, mem);
+                break;
+            case op(Op::LDY_ABSX):
+                instructions::LDY_ABSX(*this, cycles, mem);
+                break;
+
             case op(Op::JSR):
                 instructions::JSR(*this, cycles, mem);
                 break;
@@ -136,8 +180,9 @@ i32 Cpu::execute(i32 cycles, Mem& mem, bool* completed_out) {
                 instructions::NOP(*this, cycles, mem);
                 continue;  // Skip to the next iteration
             default: {
-                std::cout << "Invalid op code: 0x" << std::hex << static_cast<int>(ins) << std::dec << " at address 0x"
-                          << std::hex << (PC - 1) << std::dec << std::endl;
+                std::cout << "Invalid op code: 0x" << std::setw(2) << std::setfill('0') << std::hex
+                          << static_cast<int>(ins) << std::dec << " at address 0x" << std::hex << (PC - 1) << std::dec
+                          << std::endl;
             } break;
         }
 
@@ -156,8 +201,8 @@ i32 Cpu::execute(i32 cycles, Mem& mem, bool* completed_out) {
         completed = true;
     }
 
-    // If we ran out of cycles before completion
-    if (!completed && cycles < 0) {
+    // If we ran out of cycles before completion and not in testing mode
+    if (!completed && cycles < 0 && !testing_env) {
         std::cout << colors::BOLD << colors::RED << "Warning:" << colors::RESET
                   << "\tInsufficient cycles. Execution incomplete." << std::endl;
         std::cout << "\tRequired: > " << starting_cycles << " cycles" << std::endl;
@@ -165,8 +210,8 @@ i32 Cpu::execute(i32 cycles, Mem& mem, bool* completed_out) {
         std::cout << "\tUsed: " << starting_cycles - cycles << " cycles" << std::endl;
     }
 
-    // Show final execution status
-    if (manual_mode) {
+    // Show final execution status if in manual mode and not testing
+    if (manual_mode && !testing_env) {
         std::cout << colors::BOLD << colors::BLUE << "Execution " << (completed ? colors::GREEN : colors::RED)
                   << (completed ? "completed" : "incomplete") << colors::BLUE << " after " << (starting_cycles - cycles)
                   << " cycles.\n"
@@ -178,8 +223,10 @@ i32 Cpu::execute(i32 cycles, Mem& mem, bool* completed_out) {
         *completed_out = completed;
     }
 
-    // Reset output to decimal mode for subsequent displays
-    std::cout << std::dec;
+    // Reset output to decimal mode for subsequent displays if not in testing mode
+    if (!testing_env) {
+        std::cout << std::dec;
+    }
 
     // Return the number of cycles actually used
     return starting_cycles - cycles;

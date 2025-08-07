@@ -18,8 +18,21 @@ enum class Op : byte {
     LDA_ABSY = 0xB9,  // Load Accumulator Absolute,Y
     LDA_INX = 0xA1,   // Load Accumulator (Indirect,X)
     LDA_INY = 0xB1,   // Load Accumulator (Indirect),Y
-    JSR = 0x20,       // Jump to Subroutine
-    RTS = 0x60,       // Return from Subroutine
+
+    LDX_IM = 0xA2,    // Load X Register Immediate
+    LDX_ZP = 0xA6,    // Load X Register Zero Page
+    LDX_ZPY = 0xB6,   // Load X Register Zero Page,Y
+    LDX_AB = 0xAE,    // Load X Register Absolute
+    LDX_ABSY = 0xBE,  // Load X Register Absolute,Y
+
+    LDY_IM = 0xA0,    // Load Y Register Immediate
+    LDY_ZP = 0xA4,    // Load Y Register Zero Page
+    LDY_ZPX = 0xB4,   // Load Y Register Zero Page,X
+    LDY_AB = 0xAC,    // Load Y Register Absolute
+    LDY_ABSX = 0xBC,  // Load Y Register Absolute,X
+
+    JSR = 0x20,  // Jump to Subroutine
+    RTS = 0x60,  // Return from Subroutine
 };
 
 // Helper function to convert from Op enum to byte

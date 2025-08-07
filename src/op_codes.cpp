@@ -29,6 +29,28 @@ std::string from_byte(byte opcode) {
             return "JSR";
         case 0x60:
             return "RTS";
+        // LDX opcodes
+        case 0xA2:
+            return "LDX_IM";
+        case 0xA6:
+            return "LDX_ZP";
+        case 0xB6:
+            return "LDX_ZPY";
+        case 0xAE:
+            return "LDX_AB";
+        case 0xBE:
+            return "LDX_ABSY";
+        // LDY opcodes
+        case 0xA0:
+            return "LDY_IM";
+        case 0xA4:
+            return "LDY_ZP";
+        case 0xB4:
+            return "LDY_ZPX";
+        case 0xAC:
+            return "LDY_AB";
+        case 0xBC:
+            return "LDY_ABSX";
         default:
             return "Unknown opcode: 0x" + std::to_string(opcode);
     }

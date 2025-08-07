@@ -13,8 +13,9 @@ void inline_invalid_opcode_test(Cpu& cpu, Mem& mem) {
     mem[0xFFFE] = 0xEA;
 
     bool program_completed = false;
-    i32 cycles_used = cpu.execute(1, mem, &program_completed);  // Updated cycle count
+    i32 cycles_used = cpu.execute(1, mem, &program_completed, true);  // Updated cycle count
 
+    // Only print in non-testing environments
     std::printf("%s>> Execution completed in %d cycles%s\n", CYAN, cycles_used, RESET);
 
     if (cycles_used != 1) {

@@ -16,6 +16,22 @@ void inline_lda_absy_test(Cpu& cpu, Mem& mem);
 void inline_lda_indx_test(Cpu& cpu, Mem& mem);
 void inline_lda_indy_test(Cpu& cpu, Mem& mem);
 
+// LDX Tests
+void inline_ldx_test(Cpu& cpu, Mem& mem);
+void inline_ldx_zp_test(Cpu& cpu, Mem& mem);
+void inline_ldx_zpy_test(Cpu& cpu, Mem& mem);
+void inline_ldx_zpy_wrap_test(Cpu& cpu, Mem& mem);
+void inline_ldx_absolute_test(Cpu& cpu, Mem& mem);
+void inline_ldx_absy_test(Cpu& cpu, Mem& mem);
+
+// LDY Tests
+void inline_ldy_test(Cpu& cpu, Mem& mem);
+void inline_ldy_zp_test(Cpu& cpu, Mem& mem);
+void inline_ldy_zpx_test(Cpu& cpu, Mem& mem);
+void inline_ldy_zpx_wrap_test(Cpu& cpu, Mem& mem);
+void inline_ldy_absolute_test(Cpu& cpu, Mem& mem);
+void inline_ldy_absx_test(Cpu& cpu, Mem& mem);
+
 // JSR/RTS Tests
 void inline_jsr_rts_test(Cpu& cpu, Mem& mem);
 

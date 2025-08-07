@@ -47,8 +47,40 @@ bool run_all_tests(Cpu& cpu, Mem& mem) {
     // Print test results
     test_suite_invalid_opcode.print_results();
 
+    testing::TestSuite test_suite_ldx("LDX Op Code");
+
+    test_suite_ldx.print_header();
+
+    // Register and run individual tests
+    test_suite_ldx.register_test("Inline LDX Test", [&]() { inline_ldx_test(cpu, mem); });
+    test_suite_ldx.register_test("Inline LDX ZP Test", [&]() { inline_ldx_zp_test(cpu, mem); });
+    test_suite_ldx.register_test("Inline LDX ZPY Test", [&]() { inline_ldx_zpy_test(cpu, mem); });
+    test_suite_ldx.register_test("Inline LDX ZPY (Wrapping) Test", [&]() { inline_ldx_zpy_wrap_test(cpu, mem); });
+    test_suite_ldx.register_test("Inline LDX Absolute Test", [&]() { inline_ldx_absolute_test(cpu, mem); });
+    test_suite_ldx.register_test("Inline LDX ABSY Test", [&]() { inline_ldx_absy_test(cpu, mem); });
+
+    // Print the results
+    test_suite_ldx.print_results();
+
+    testing::TestSuite test_suite_ldy("LDY Op Code");
+
+    test_suite_ldy.print_header();
+
+    // Register and run individual tests
+    test_suite_ldy.register_test("Inline LDY Test", [&]() { inline_ldy_test(cpu, mem); });
+    test_suite_ldy.register_test("Inline LDY ZP Test", [&]() { inline_ldy_zp_test(cpu, mem); });
+    test_suite_ldy.register_test("Inline LDY ZPX Test", [&]() { inline_ldy_zpx_test(cpu, mem); });
+    test_suite_ldy.register_test("Inline LDY ZPX (Wrapping) Test", [&]() { inline_ldy_zpx_wrap_test(cpu, mem); });
+    test_suite_ldy.register_test("Inline LDY Absolute Test", [&]() { inline_ldy_absolute_test(cpu, mem); });
+    test_suite_ldy.register_test("Inline LDY ABSX Test", [&]() { inline_ldy_absx_test(cpu, mem); });
+
+    // Print the results
+    test_suite_ldy.print_results();
+
     // Return true if all tests passed
-    int failed_count = test_suite_lda.get_failed_count() + test_suite_jsr_rts.get_failed_count();
+    int failed_count = test_suite_lda.get_failed_count() + test_suite_jsr_rts.get_failed_count() +
+                       test_suite_invalid_opcode.get_failed_count() + test_suite_ldx.get_failed_count() +
+                       test_suite_ldy.get_failed_count();
 
     return failed_count == 0;
 }

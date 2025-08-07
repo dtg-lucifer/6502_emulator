@@ -46,7 +46,7 @@ class Cpu {
     // Execute CPU instructions for the given number of cycles
     // Returns the number of cycles actually used
     // Sets the completed flag to true if execution finished with RTS
-    i32 execute(i32 cycles, Mem& mem, bool* completed = nullptr);
+    i32 execute(i32 cycles, Mem& mem, bool* completed = nullptr, bool testing_env = false);
 
     i32 cpu_mode_decider(bool manual_mode, i32& cycles, i32 starting_cycles, Mem& mem, bool* completed_out = nullptr) {
         if (manual_mode) {
@@ -88,7 +88,12 @@ class Cpu {
         return starting_cycles - cycles;
     }
 
-    void print_current_execution(word ins, Cpu& cpu, Mem& mem) {
+    void print_current_execution(word ins, Cpu& cpu, Mem& mem, bool testing_env = false) {
+        // Skip printing in testing mode
+        if (testing_env) {
+            return;
+        }
+
         word operand_word = static_cast<word>(mem[PC]) | (static_cast<word>(mem[PC + 1]) << 8);
 
         std::cout << colors::BOLD << colors::BLUE;
@@ -105,7 +110,11 @@ class Cpu {
         std::cout << std::dec;  // Ensure we print in decimal mode for the rest of the output
     }
 
-    void print_state(int cycles_used, bool program_completed) const {
+    void print_state(int cycles_used, bool program_completed, bool testing_env = false) const {
+        // Skip printing in testing mode
+        if (testing_env) {
+            return;
+        }
         // Save the current cout formatting state
         auto flags = std::cout.flags();
 

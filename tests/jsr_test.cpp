@@ -30,9 +30,9 @@ void inline_jsr_rts_test(Cpu& cpu, Mem& mem) {
 
     // Track exact number of cycles required for JSR + LDA + RTS
     bool program_completed = false;
-    i32 cycles_used = cpu.execute(13, mem, &program_completed);  // Updated cycle count
+    i32 cycles_used = cpu.execute(13, mem, &program_completed, true);  // Updated cycle count
 
-    // Print cycles used
+    // Print cycles used (only outside of testing environment)
     std::printf("%s>> Execution completed in %d cycles%s\n", CYAN, cycles_used, RESET);
 
     // Print result with color
@@ -62,7 +62,7 @@ void inline_jsr_rts_test(Cpu& cpu, Mem& mem) {
         throw testing::TestFailedException(ss.str());
     }
 
-    // Print the cycles used and completion status for diagnostics
+    // Print the cycles used and completion status for diagnostics (only outside of testing environment)
     std::cout << "JSR+LDA+RTS execution took " << cycles_used
               << " cycles (Completed: " << (program_completed ? "Yes" : "No") << ")" << std::endl;
 

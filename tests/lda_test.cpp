@@ -14,9 +14,10 @@ void inline_lda_test(Cpu& cpu, Mem& mem) {
     mem[0xFFFD] = 0xFF;            // Value to load into accumulator
 
     bool program_completed = false;
-    i32 cycles_used = cpu.execute(2, mem, &program_completed);
+    i32 cycles_used = cpu.execute(2, mem, &program_completed, true);
 
     // Print cycles used and completion status
+
     std::printf("%sExecution %scompleted in %d cycles%s\n", CYAN, program_completed ? "successfully " : "in",
                 cycles_used, RESET);
 
@@ -49,9 +50,10 @@ void inline_lda_zp_test(Cpu& cpu, Mem& mem) {
     mem[0x0042] = 0x37;            // Value at the zero page
 
     bool program_completed = false;
-    i32 cycles_used = cpu.execute(3, mem, &program_completed);
+    i32 cycles_used = cpu.execute(3, mem, &program_completed, true);
 
     // Print cycles used and completion status
+
     std::printf("%sExecution %scompleted in %d cycles%s\n", CYAN, program_completed ? "successfully " : "in",
                 cycles_used, RESET);
 
@@ -80,9 +82,10 @@ void inline_lda_absolute_test(Cpu& cpu, Mem& mem) {
 
     bool program_completed = false;
     constexpr i32 expected_cycles = 4;  // LDA_AB takes 4 cycles
-    i32 cycles_used = cpu.execute(4, mem, &program_completed);
+    i32 cycles_used = cpu.execute(4, mem, &program_completed, true);
 
     // Print cycles used and completion status
+
     std::printf("%sExecution %scompleted in %d cycles%s\n", CYAN, program_completed ? "successfully " : "in",
                 cycles_used, RESET);
 
@@ -111,15 +114,16 @@ void inline_lda_zpx_test(Cpu& cpu, Mem& mem) {
     mem[0xFFFC] = op(Op::LDA_ZPX);  // Load Zero Page with X
     mem[0xFFFD] = 0x42;             // Zero page address
     mem[0x0047] = 0x38;             // Value at the effective address (0x42 + X)
-    mem[0xFFFE] = 0x00;             // Add termination marker (BRK/NULL)
+    mem[0xFFFE] = op(Op::NOP);      // Add termination marker (BRK/NULL)
 
     // Set X register value
     cpu.set(Register::X, 0x05);
 
     bool program_completed = false;
-    i32 cycles_used = cpu.execute(4, mem, &program_completed);
+    i32 cycles_used = cpu.execute(4, mem, &program_completed, true);
 
     // Print cycles used and completion status
+
     std::printf("%sExecution %scompleted in %d cycles%s\n", CYAN, program_completed ? "successfully " : "in",
                 cycles_used, RESET);
 
@@ -142,15 +146,16 @@ void inline_lda_zpx_wrap_test(Cpu& cpu, Mem& mem) {
     mem[0xFFFC] = op(Op::LDA_ZPX);  // Load Zero Page with X
     mem[0xFFFD] = 0x80;             // Zero page address
     mem[0x007F] = 0x37;             // Value at the effective address (0x80 + X)
-    mem[0xFFFE] = 0x00;             // Add termination marker (BRK/NULL)
+    mem[0xFFFE] = op(Op::NOP);      // Add termination marker (BRK/NULL)
 
     // Set X register value
     cpu.set(Register::X, 0xFF);
 
     bool program_completed = false;
-    i32 cycles_used = cpu.execute(4, mem, &program_completed);
+    i32 cycles_used = cpu.execute(4, mem, &program_completed, true);
 
     // Print cycles used and completion status
+
     std::printf("%sExecution %scompleted in %d cycles%s\n", CYAN, program_completed ? "successfully " : "in",
                 cycles_used, RESET);
 
@@ -182,9 +187,10 @@ void inline_lda_absx_test(Cpu& cpu, Mem& mem) {
     cpu.set(Register::X, 0x05);
 
     bool program_completed = false;
-    i32 cycles_used = cpu.execute(4, mem, &program_completed);
+    i32 cycles_used = cpu.execute(4, mem, &program_completed, true);
 
     // Print cycles used and completion status
+
     std::printf("%sExecution %scompleted in %d cycles%s\n", CYAN, program_completed ? "successfully " : "in",
                 cycles_used, RESET);
 
@@ -220,7 +226,7 @@ void inline_lda_absx_test(Cpu& cpu, Mem& mem) {
     cpu.set(Register::X, 0x05);
 
     program_completed = false;
-    cycles_used = cpu.execute(4, mem, &program_completed);
+    cycles_used = cpu.execute(4, mem, &program_completed, true);
 
     // Verify N flag is set for negative value
     if (!cpu.N) {
@@ -243,9 +249,10 @@ void inline_lda_absy_test(Cpu& cpu, Mem& mem) {
     cpu.set(Register::Y, 0x06);
 
     bool program_completed = false;
-    i32 cycles_used = cpu.execute(4, mem, &program_completed);
+    i32 cycles_used = cpu.execute(4, mem, &program_completed, true);
 
     // Print cycles used and completion status
+
     std::printf("%sExecution %scompleted in %d cycles%s\n", CYAN, program_completed ? "successfully " : "in",
                 cycles_used, RESET);
 
@@ -278,7 +285,7 @@ void inline_lda_absy_test(Cpu& cpu, Mem& mem) {
     cpu.set(Register::Y, 0x06);
 
     program_completed = false;
-    cycles_used = cpu.execute(4, mem, &program_completed);
+    cycles_used = cpu.execute(4, mem, &program_completed, true);
 
     // Verify N flag is set for negative value
     if (!cpu.N) {
@@ -304,9 +311,10 @@ void inline_lda_indx_test(Cpu& cpu, Mem& mem) {
     mem[0x2074] = 0x42;  // Value to load into A
 
     bool program_completed = false;
-    i32 cycles_used = cpu.execute(6, mem, &program_completed);
+    i32 cycles_used = cpu.execute(6, mem, &program_completed, true);
 
     // Print cycles used and completion status
+
     std::printf("%sExecution %scompleted in %d cycles%s\n", CYAN, program_completed ? "successfully " : "in",
                 cycles_used, RESET);
 
@@ -330,7 +338,7 @@ void inline_lda_indx_test(Cpu& cpu, Mem& mem) {
     cpu.reset(mem);
     mem[0xFFFC] = op(Op::LDA_INX);  // Load (Indirect,X)
     mem[0xFFFD] = 0x20;             // Zero page address
-    mem[0xFFFE] = 0x00;             // Add NOP instruction for termination
+    mem[0xFFFE] = op(Op::NOP);      // NOP
 
     // Setup X register
     cpu.set(Register::X, 0x04);
@@ -343,7 +351,7 @@ void inline_lda_indx_test(Cpu& cpu, Mem& mem) {
     mem[0x2074] = 0x00;  // Zero value to test Z flag
 
     program_completed = false;
-    cycles_used = cpu.execute(6, mem, &program_completed);
+    cycles_used = cpu.execute(6, mem, &program_completed, true);
 
     // Verify Z flag is set for zero value
     if (!cpu.Z) {
@@ -372,9 +380,10 @@ void inline_lda_indy_test(Cpu& cpu, Mem& mem) {
     mem[0x3050] = 0x99;  // Value to load into A (at 0x3040 + 0x10)
 
     bool program_completed = false;
-    i32 cycles_used = cpu.execute(5, mem, &program_completed);
+    i32 cycles_used = cpu.execute(5, mem, &program_completed, true);
 
     // Print cycles used and completion status
+
     std::printf("%sExecution %scompleted in %d cycles%s\n", CYAN, program_completed ? "successfully " : "in",
                 cycles_used, RESET);
 
@@ -398,7 +407,7 @@ void inline_lda_indy_test(Cpu& cpu, Mem& mem) {
     cpu.reset(mem);
     mem[0xFFFC] = op(Op::LDA_INY);  // Load (Indirect),Y
     mem[0xFFFD] = 0xFF;             // Zero page address at the end of zero page
-    mem[0xFFFE] = 0x00;             // Add NOP instruction for termination
+    mem[0xFFFE] = op(Op::NOP);      // Add NOP instruction for termination
 
     // Zero page location wraps around
     mem[0xFF] = 0x40;  // Low byte of indirect address
@@ -411,7 +420,7 @@ void inline_lda_indy_test(Cpu& cpu, Mem& mem) {
     mem[0x304F] = 0x42;  // Value to load into A (at 0x3040 + 0x0F)
 
     program_completed = false;
-    cycles_used = cpu.execute(6, mem, &program_completed);
+    cycles_used = cpu.execute(6, mem, &program_completed, true);
 
     // Verify correct value is loaded despite wraparound
     if (cpu.get(Register::A) != 0x42) {

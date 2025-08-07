@@ -24,7 +24,10 @@ add_library(emulator_core
     src/types.cpp
     src/reader.cpp
     src/op_codes.cpp
+    programs/demo_program.cpp
     src/instructions/lda.cpp
+    src/instructions/ldx.cpp
+    src/instructions/ldy.cpp
     src/instructions/jsr.cpp
     src/instructions/rts.cpp
 )
@@ -47,6 +50,8 @@ if(ENABLE_TESTING)
         tests/index_test.cpp
         tests/invalid_opcode_test.cpp
         tests/lda_test.cpp
+        tests/ldx_test.cpp
+        tests/ldy_test.cpp
         tests/jsr_test.cpp
     )
 
