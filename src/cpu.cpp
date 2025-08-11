@@ -21,14 +21,7 @@ void Cpu::reset(Mem& mem) {
     A = 0;        // Reset accumulator
     X = 0;        // Reset X register
     Y = 0;        // Reset Y register
-    FLAGS_B = 0;  // Clear the Break flag
-    FLAGS_D = 0;  // Clear the Decimal mode flag
-    FLAGS_I = 1;  // Set the Interrupt Disable flag (I bit is set
-    FLAGS_Z = 1;  // Set the Zero flag (Z bit is set)
-    FLAGS_C = 0;  // Clear the Carry flag (C bit is cleared)
-    FLAGS_U = 1;  // Set the Unused/expansion flag (U bit is set)
-    FLAGS_V = 0;  // Clear the Overflow flag (V bit is cleared)
-    FLAGS_N = 0;  // Clear the Negative flag (N bit is cleared)
+    FLAGS = 0;    // Clear all flags
 
     mem.init();
 }
@@ -52,8 +45,8 @@ word Cpu::fetch_word(i32& cycles, Mem& mem) {
     return d;
 }
 
-byte Cpu::read_byte(byte zp_addr, i32& cycles, Mem& mem) {
-    byte d = mem[zp_addr];
+byte Cpu::read_byte(byte addr, i32& cycles, Mem& mem) {
+    byte d = mem[addr];
     cycles--;
     return d;
 }
@@ -235,6 +228,27 @@ i32 Cpu::execute(i32 cycles, Mem& mem, bool* completed_out, bool testing_env) {
             case op(Op::NOP):
                 instructions::NOP(*this, cycles, mem);
                 continue;  // Skip to the next iteration
+            // -------------------------------------------------
+            // Stack Operations
+            case op(Op::PHA):
+                instructions::PHA(*this, cycles, mem);
+                break;
+            case op(Op::PHP):
+                instructions::PHP(*this, cycles, mem);
+                break;
+            case op(Op::PLA):
+                instructions::PLA(*this, cycles, mem);
+                break;
+            case op(Op::PLP):
+                instructions::PLP(*this, cycles, mem);
+                break;
+            case op(Op::TSX):
+                instructions::TSX(*this, cycles, mem);
+                break;
+            case op(Op::TXS):
+                instructions::TXS(*this, cycles, mem);
+                break;
+            // -------------------------------------------------
             default: {
                 std::cout << "Invalid op code: 0x" << std::setw(2) << std::setfill('0') << std::hex
                           << static_cast<int>(ins) << std::dec << " at address 0x" << std::hex << (PC - 1) << std::dec

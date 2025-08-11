@@ -34,6 +34,12 @@ add_library(emulator_core
     src/instructions/stx.cpp
     src/instructions/sty.cpp
     src/instructions/jmp.cpp
+    src/instructions/pla.cpp
+    src/instructions/plp.cpp
+    src/instructions/php.cpp
+    src/instructions/pha.cpp
+    src/instructions/txs.cpp
+    src/instructions/tsx.cpp
 )
 
 # Make includes available to any target linking against emulator_core
@@ -61,6 +67,7 @@ if(ENABLE_TESTING)
         tests/sta_test.cpp
         tests/stx_test.cpp
         tests/sty_test.cpp
+        tests/stack_operations_test.cpp
     )
 
     # Link the test executable with the core library

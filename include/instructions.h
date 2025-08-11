@@ -64,6 +64,14 @@ void RTS(Cpu& cpu, i32& cycles, Mem& mem);
 // NOP Instruction
 void NOP(Cpu& cpu, i32& cycles, Mem& mem);
 
+// Stack Operations
+void PHA(Cpu& cpu, i32& cycles, Mem& mem);  // Push Accumulator on Stack
+void PHP(Cpu& cpu, i32& cycles, Mem& mem);  // Push Processor Status on Stack
+void PLA(Cpu& cpu, i32& cycles, Mem& mem);  // Pull Accumulator from Stack
+void PLP(Cpu& cpu, i32& cycles, Mem& mem);  // Pull Processor Status from Stack
+void TSX(Cpu& cpu, i32& cycles, Mem& mem);  // Transfer Stack Pointer to X
+void TXS(Cpu& cpu, i32& cycles, Mem& mem);  // Transfer X to Stack Pointer
+
 }  // namespace instructions
 
 #endif  // INSTRUCTIONS_H

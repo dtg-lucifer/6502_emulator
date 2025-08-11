@@ -62,6 +62,14 @@ void inline_jmp_absolute_test(Cpu& cpu, Mem& mem);
 void inline_jmp_indirect_test(Cpu& cpu, Mem& mem);
 void inline_jmp_indirect_page_boundary_bug_test(Cpu& cpu, Mem& mem);
 
+// Stack Operations Tests
+void inline_pha_test(Cpu& cpu, Mem& mem);
+void inline_php_test(Cpu& cpu, Mem& mem);
+void inline_pla_test(Cpu& cpu, Mem& mem);
+void inline_plp_test(Cpu& cpu, Mem& mem);
+void inline_tsx_test(Cpu& cpu, Mem& mem);
+void inline_txs_test(Cpu& cpu, Mem& mem);
+
 // Invalid Opcode Test
 void inline_invalid_opcode_test(Cpu& cpu, Mem& mem);
 
@@ -74,6 +82,7 @@ bool run_all_tests(Cpu& cpu, Mem& mem);
 
 // Test suite functions
 void jmp_test_suite(Cpu& cpu, Mem& mem);
+void stack_operations_test_suite(Cpu& cpu, Mem& mem);
 }  // namespace testing
 
 #endif  // TEST_H

@@ -52,6 +52,16 @@ enum class Op : byte {
     JMP = 0x4C,   // Jump Absolute
     JMPI = 0x6C,  // Jump Indirect
     // -----------------------------------------------
+    // Stack Operations
+    PHA = 0x48,  // Push Accumulator on Stack
+    PHP = 0x08,  // Push Processor Status on Stack
+    PLA = 0x68,  // Pull Accumulator from Stack
+    PLP = 0x28,  // Pull Processor Status from Stack
+    // -----------------------------------------------
+    // Register Transfer Operations
+    TSX = 0xBA,  // Transfer Stack Pointer to X
+    TXS = 0x9A,  // Transfer X to Stack Pointer
+    // -----------------------------------------------
 };
 
 // Helper function to convert from Op enum to byte

@@ -121,6 +121,9 @@ bool run_all_tests(Cpu& cpu, Mem& mem) {
     // Run JMP tests
     jmp_test_suite(cpu, mem);
 
+    // Run Stack Operations tests
+    stack_operations_test_suite(cpu, mem);
+
     // Return true if all tests passed
     // Since the JMP test suite doesn't return a failed count, we're assuming it's successful
     // if the execution reaches this point (as failed tests throw exceptions)
