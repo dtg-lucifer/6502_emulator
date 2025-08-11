@@ -30,10 +30,10 @@ void inline_ldy_test(Cpu& cpu, Mem& mem) {
     }
 
     // Verify flags are correctly set
-    if (!cpu.N) {
+    if (!cpu.FLAGS_N) {
         throw testing::TestFailedException("LDY_IM test failed: Negative flag should be set");
     }
-    if (cpu.Z) {
+    if (cpu.FLAGS_Z) {
         throw testing::TestFailedException("LDY_IM test failed: Zero flag should not be set");
     }
 
@@ -46,10 +46,10 @@ void inline_ldy_test(Cpu& cpu, Mem& mem) {
     cycles_used = cpu.execute(2, mem, &program_completed, true);
 
     // Verify flags for zero value
-    if (!cpu.Z) {
+    if (!cpu.FLAGS_Z) {
         throw testing::TestFailedException("LDY_IM test failed: Zero flag should be set");
     }
-    if (cpu.N) {
+    if (cpu.FLAGS_N) {
         throw testing::TestFailedException("LDY_IM test failed: Negative flag should not be set");
     }
 }
@@ -79,10 +79,10 @@ void inline_ldy_zp_test(Cpu& cpu, Mem& mem) {
     }
 
     // Verify flags are correctly set
-    if (cpu.N) {
+    if (cpu.FLAGS_N) {
         throw testing::TestFailedException("LDY_ZP test failed: Negative flag should not be set");
     }
-    if (cpu.Z) {
+    if (cpu.FLAGS_Z) {
         throw testing::TestFailedException("LDY_ZP test failed: Zero flag should not be set");
     }
 }
@@ -116,10 +116,10 @@ void inline_ldy_zpx_test(Cpu& cpu, Mem& mem) {
     }
 
     // Verify flags are correctly set
-    if (cpu.N) {
+    if (cpu.FLAGS_N) {
         throw testing::TestFailedException("LDY_ZPX test failed: Negative flag should not be set");
     }
-    if (cpu.Z) {
+    if (cpu.FLAGS_Z) {
         throw testing::TestFailedException("LDY_ZPX test failed: Zero flag should not be set");
     }
 }
@@ -179,10 +179,10 @@ void inline_ldy_absolute_test(Cpu& cpu, Mem& mem) {
     }
 
     // Verify flags are correctly set
-    if (cpu.N) {
+    if (cpu.FLAGS_N) {
         throw testing::TestFailedException("LDY_AB test failed: Negative flag should not be set");
     }
-    if (cpu.Z) {
+    if (cpu.FLAGS_Z) {
         throw testing::TestFailedException("LDY_AB test failed: Zero flag should not be set");
     }
 }
@@ -218,10 +218,10 @@ void inline_ldy_absx_test(Cpu& cpu, Mem& mem) {
     }
 
     // Verify flags are correctly set
-    if (cpu.N) {
+    if (cpu.FLAGS_N) {
         throw testing::TestFailedException("LDY_ABSX test failed: Negative flag should not be set");
     }
-    if (cpu.Z) {
+    if (cpu.FLAGS_Z) {
         throw testing::TestFailedException("LDY_ABSX test failed: Zero flag should not be set");
     }
 
@@ -246,10 +246,10 @@ void inline_ldy_absx_test(Cpu& cpu, Mem& mem) {
     }
 
     // Verify N flag is set for negative value
-    if (!cpu.N) {
+    if (!cpu.FLAGS_N) {
         throw testing::TestFailedException("LDY_ABSX test failed: Negative flag should be set for value 0x80");
     }
-    if (cpu.Z) {
+    if (cpu.FLAGS_Z) {
         throw testing::TestFailedException("LDY_ABSX test failed: Zero flag should not be set for value 0x80");
     }
 }

@@ -144,19 +144,19 @@ inline void print_cpu_state(Cpu& cpu) {
 
     // Print flags
     std::cout << colors::MAGENTA << "Flags:" << colors::RESET << std::endl;
-    std::cout << "N: " << (cpu.N ? colors::GREEN : colors::RED) << static_cast<int>(cpu.N) << colors::RESET
+    std::cout << "N: " << (cpu.FLAGS_N ? colors::GREEN : colors::RED) << static_cast<int>(cpu.FLAGS_N) << colors::RESET
               << std::endl;
-    std::cout << "V: " << (cpu.V ? colors::GREEN : colors::RED) << static_cast<int>(cpu.V) << colors::RESET
+    std::cout << "V: " << (cpu.FLAGS_V ? colors::GREEN : colors::RED) << static_cast<int>(cpu.FLAGS_V) << colors::RESET
               << std::endl;
-    std::cout << "B: " << (cpu.B ? colors::GREEN : colors::RED) << static_cast<int>(cpu.B) << colors::RESET
+    std::cout << "B: " << (cpu.FLAGS_B ? colors::GREEN : colors::RED) << static_cast<int>(cpu.FLAGS_B) << colors::RESET
               << std::endl;
-    std::cout << "D: " << (cpu.D ? colors::GREEN : colors::RED) << static_cast<int>(cpu.D) << colors::RESET
+    std::cout << "D: " << (cpu.FLAGS_D ? colors::GREEN : colors::RED) << static_cast<int>(cpu.FLAGS_D) << colors::RESET
               << std::endl;
-    std::cout << "I: " << (cpu.I ? colors::GREEN : colors::RED) << static_cast<int>(cpu.I) << colors::RESET
+    std::cout << "I: " << (cpu.FLAGS_I ? colors::GREEN : colors::RED) << static_cast<int>(cpu.FLAGS_I) << colors::RESET
               << std::endl;
-    std::cout << "Z: " << (cpu.Z ? colors::GREEN : colors::RED) << static_cast<int>(cpu.Z) << colors::RESET
+    std::cout << "Z: " << (cpu.FLAGS_Z ? colors::GREEN : colors::RED) << static_cast<int>(cpu.FLAGS_Z) << colors::RESET
               << std::endl;
-    std::cout << "C: " << (cpu.C ? colors::GREEN : colors::RED) << static_cast<int>(cpu.C) << colors::RESET
+    std::cout << "C: " << (cpu.FLAGS_C ? colors::GREEN : colors::RED) << static_cast<int>(cpu.FLAGS_C) << colors::RESET
               << std::endl;
 }
 }  // namespace testing

@@ -33,10 +33,10 @@ void inline_lda_test(Cpu& cpu, Mem& mem) {
     }
 
     // Verify flags are correctly set
-    if (!cpu.N) {
+    if (!cpu.FLAGS_N) {
         throw testing::TestFailedException("LDA_IM test failed: Negative flag should be set");
     }
-    if (cpu.Z) {
+    if (cpu.FLAGS_Z) {
         throw testing::TestFailedException("LDA_IM test failed: Zero flag should not be set");
     }
 }
@@ -206,10 +206,10 @@ void inline_lda_absx_test(Cpu& cpu, Mem& mem) {
     }
 
     // Verify flags are correctly set (non-zero, non-negative value)
-    if (cpu.Z) {
+    if (cpu.FLAGS_Z) {
         throw testing::TestFailedException("LDA_ABSX test failed: Zero flag should not be set");
     }
-    if (cpu.N) {
+    if (cpu.FLAGS_N) {
         throw testing::TestFailedException("LDA_ABSX test failed: Negative flag should not be set");
     }
 
@@ -229,7 +229,7 @@ void inline_lda_absx_test(Cpu& cpu, Mem& mem) {
     cycles_used = cpu.execute(4, mem, &program_completed, true);
 
     // Verify N flag is set for negative value
-    if (!cpu.N) {
+    if (!cpu.FLAGS_N) {
         throw testing::TestFailedException("LDA_ABSX test failed: Negative flag should be set for value 0x85");
     }
 }
@@ -265,10 +265,10 @@ void inline_lda_absy_test(Cpu& cpu, Mem& mem) {
     }
 
     // Verify flags are correctly set (non-zero, non-negative value)
-    if (cpu.Z) {
+    if (cpu.FLAGS_Z) {
         throw testing::TestFailedException("LDA_ABSY test failed: Zero flag should not be set");
     }
-    if (cpu.N) {
+    if (cpu.FLAGS_N) {
         throw testing::TestFailedException("LDA_ABSY test failed: Negative flag should not be set");
     }
 
@@ -288,7 +288,7 @@ void inline_lda_absy_test(Cpu& cpu, Mem& mem) {
     cycles_used = cpu.execute(4, mem, &program_completed, true);
 
     // Verify N flag is set for negative value
-    if (!cpu.N) {
+    if (!cpu.FLAGS_N) {
         throw testing::TestFailedException("LDA_ABSY test failed: Negative flag should be set for value 0x85");
     }
 }
@@ -327,10 +327,10 @@ void inline_lda_indx_test(Cpu& cpu, Mem& mem) {
     }
 
     // Verify flags are correctly set (non-zero, non-negative value)
-    if (cpu.Z) {
+    if (cpu.FLAGS_Z) {
         throw testing::TestFailedException("LDA_INX test failed: Zero flag should not be set");
     }
-    if (cpu.N) {
+    if (cpu.FLAGS_N) {
         throw testing::TestFailedException("LDA_INX test failed: Negative flag should not be set");
     }
 
@@ -354,10 +354,10 @@ void inline_lda_indx_test(Cpu& cpu, Mem& mem) {
     cycles_used = cpu.execute(6, mem, &program_completed, true);
 
     // Verify Z flag is set for zero value
-    if (!cpu.Z) {
+    if (!cpu.FLAGS_Z) {
         throw testing::TestFailedException("LDA_INX test failed: Zero flag should be set for value 0x00");
     }
-    if (cpu.N) {
+    if (cpu.FLAGS_N) {
         throw testing::TestFailedException("LDA_INX test failed: Negative flag should not be set for value 0x00");
     }
 }
@@ -396,10 +396,10 @@ void inline_lda_indy_test(Cpu& cpu, Mem& mem) {
     }
 
     // Verify flags are correctly set (non-zero, negative value)
-    if (cpu.Z) {
+    if (cpu.FLAGS_Z) {
         throw testing::TestFailedException("LDA_INY test failed: Zero flag should not be set");
     }
-    if (!cpu.N) {
+    if (!cpu.FLAGS_N) {
         throw testing::TestFailedException("LDA_INY test failed: Negative flag should be set for value 0x99");
     }
 

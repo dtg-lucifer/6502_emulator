@@ -5,8 +5,8 @@ namespace instructions {
 
 // Helper function to set flags for LDY instructions
 static void LDY_SetFlags(Cpu& cpu) {
-    cpu.Z = (cpu.Y == 0);              // Set the Zero flag
-    cpu.N = (cpu.Y & 0b10000000) > 0;  // Set the Negative flag
+    cpu.FLAGS_Z = (cpu.Y == 0);               // Set the Zero flag
+    cpu.FLAGS_N = (cpu.Y & 0b10000000) != 0;  // Set the Negative flag
 }
 
 // LDY Immediate mode

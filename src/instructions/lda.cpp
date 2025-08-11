@@ -5,8 +5,8 @@ namespace instructions {
 
 // Helper function to set flags for LDA instructions
 static void LDA_SetFlags(Cpu& cpu) {
-    cpu.Z = (cpu.A == 0);              // Set the Zero flag
-    cpu.N = (cpu.A & 0b10000000) > 0;  // Set the Negative flag
+    cpu.FLAGS_Z = (cpu.A == 0);               // Set the Zero flag
+    cpu.FLAGS_N = (cpu.A & 0b10000000) != 0;  // Set the Negative flag
 }
 
 // LDA Immediate mode

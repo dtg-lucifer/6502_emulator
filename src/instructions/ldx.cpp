@@ -5,8 +5,8 @@ namespace instructions {
 
 // Helper function to set flags for LDX instructions
 static void LDX_SetFlags(Cpu& cpu) {
-    cpu.Z = (cpu.X == 0);              // Set the Zero flag
-    cpu.N = (cpu.X & 0b10000000) > 0;  // Set the Negative flag
+    cpu.FLAGS_Z = (cpu.X == 0);               // Set the Zero flag
+    cpu.FLAGS_N = (cpu.X & 0b10000000) != 0;  // Set the Negative flag
 }
 
 // LDX Immediate mode

@@ -53,6 +53,11 @@ void STY_ABS(Cpu& cpu, i32& cycles, Mem& mem);
 // JSR Instruction
 void JSR(Cpu& cpu, i32& cycles, Mem& mem);
 
+// JMP Instruction
+void JMP(Cpu& cpu, i32& cycles, Mem& mem);
+// JMPI Instruction
+void JMPI(Cpu& cpu, i32& cycles, Mem& mem);
+
 // RTS Instruction
 void RTS(Cpu& cpu, i32& cycles, Mem& mem);
 

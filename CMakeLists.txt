@@ -33,6 +33,7 @@ add_library(emulator_core
     src/instructions/sta.cpp
     src/instructions/stx.cpp
     src/instructions/sty.cpp
+    src/instructions/jmp.cpp
 )
 
 # Make includes available to any target linking against emulator_core
@@ -56,6 +57,7 @@ if(ENABLE_TESTING)
         tests/ldx_test.cpp
         tests/ldy_test.cpp
         tests/jsr_test.cpp
+        tests/jmp_test.cpp
         tests/sta_test.cpp
         tests/stx_test.cpp
         tests/sty_test.cpp

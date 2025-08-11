@@ -57,6 +57,11 @@ void inline_sty_absolute_test(Cpu& cpu, Mem& mem);
 // JSR/RTS Tests
 void inline_jsr_rts_test(Cpu& cpu, Mem& mem);
 
+// JMP Tests
+void inline_jmp_absolute_test(Cpu& cpu, Mem& mem);
+void inline_jmp_indirect_test(Cpu& cpu, Mem& mem);
+void inline_jmp_indirect_page_boundary_bug_test(Cpu& cpu, Mem& mem);
+
 // Invalid Opcode Test
 void inline_invalid_opcode_test(Cpu& cpu, Mem& mem);
 
@@ -66,6 +71,9 @@ void stx_test_suite(Cpu& cpu, Mem& mem);
 void sty_test_suite(Cpu& cpu, Mem& mem);
 
 bool run_all_tests(Cpu& cpu, Mem& mem);
+
+// Test suite functions
+void jmp_test_suite(Cpu& cpu, Mem& mem);
 }  // namespace testing
 
 #endif  // TEST_H

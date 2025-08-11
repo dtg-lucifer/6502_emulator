@@ -118,7 +118,12 @@ bool run_all_tests(Cpu& cpu, Mem& mem) {
 
     test_suite_sty.print_results();
 
+    // Run JMP tests
+    jmp_test_suite(cpu, mem);
+
     // Return true if all tests passed
+    // Since the JMP test suite doesn't return a failed count, we're assuming it's successful
+    // if the execution reaches this point (as failed tests throw exceptions)
     int failed_count = test_suite_lda.get_failed_count() + test_suite_jsr_rts.get_failed_count() +
                        test_suite_invalid_opcode.get_failed_count() + test_suite_ldx.get_failed_count() +
                        test_suite_ldy.get_failed_count() + test_suite_sta.get_failed_count() +

@@ -47,8 +47,11 @@ enum class Op : byte {
     STY_ZPX = 0x94,  // Store Y Register Zero Page,X
     STY_ABS = 0x8C,  // Store Y Register Absolute
     // -----------------------------------------------
-    JSR = 0x20,  // Jump to Subroutine
-    RTS = 0x60,  // Return from Subroutine
+    JSR = 0x20,   // Jump to Subroutine
+    RTS = 0x60,   // Return from Subroutine
+    JMP = 0x4C,   // Jump Absolute
+    JMPI = 0x6C,  // Jump Indirect
+    // -----------------------------------------------
 };
 
 // Helper function to convert from Op enum to byte
