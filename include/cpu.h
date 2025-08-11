@@ -24,15 +24,19 @@ class Cpu {
     byte& X = registers[static_cast<byte>(Register::X)];
     byte& Y = registers[static_cast<byte>(Register::Y)];
 
-    // Status flags
-    byte N : 1;  // Negative Flag (bit 7)
-    byte V : 1;  // Overflow Flag (bit 6)
-    byte U : 1;  // Unused/expansion (bit 5)
-    byte B : 1;  // Break Flag (bit 4)
-    byte D : 1;  // Decimal Mode Flag (bit 3)
-    byte I : 1;  // Interrupt Disable Flag (bit 2)
-    byte Z : 1;  // Zero Flag (bit 1)
-    byte C : 1;  // Carry Flag (bit 0)
+    union {
+        byte FLAGS;  // Status flags byte
+        struct {
+            byte FLAGS_N : 1;  // Negative Flag (bit 7)
+            byte FLAGS_V : 1;  // Overflow Flag (bit 6)
+            byte FLAGS_U : 1;  // Unused/expansion (bit 5)
+            byte FLAGS_B : 1;  // Break Flag (bit 4)
+            byte FLAGS_D : 1;  // Decimal Mode Flag (bit 3)
+            byte FLAGS_I : 1;  // Interrupt Disable Flag (bit 2)
+            byte FLAGS_Z : 1;  // Zero Flag (bit 1)
+            byte FLAGS_C : 1;  // Carry Flag (bit 0)
+        };
+    };
 
     // Register access methods
     byte& get(const Register r);
@@ -120,11 +124,11 @@ class Cpu {
 
         // Create a nicer formatted output with borders and aligned values
         std::cout << colors::GREEN << "\n";
-        std::cout << "┌─────────────── CPU STATE ───────────────────┐\n";
+        std::cout << "┌───────────────── CPU STATE ─────────────────┐\n";
         std::cout << "| " << colors::BOLD << "Execution " << (program_completed ? colors::GREEN : colors::RED)
                   << (program_completed ? "COMPLETED" : "INCOMPLETE") << colors::RESET << colors::GREEN << colors::BOLD
                   << " using " << cycles_used << " cycles" << std::setw(13) << std::setfill(' ') << " │\n";
-        std::cout << "├─────────────────────────────────────────────┤\n";
+        std::cout << "├───────────────── REGISTERS ─────────────────┤\n";
         // Register section
         std::cout << "│ ";
         std::cout << colors::BOLD << "PC" << colors::GREEN << " (16-bit): 0x" << std::setw(4) << std::setfill('0')
@@ -150,13 +154,14 @@ class Cpu {
                   << " │\n";
 
         // Status flags section
-        std::cout << "├────────────── STATUS FLAGS ─────────────────┤\n";
+        std::cout << "├─────────────── STATUS FLAGS ────────────────┤\n";
         std::cout << "│  ";
         std::cout << colors::BOLD << "N   V   U   B   D   I   Z   C" << colors::GREEN << "              │\n";
 
-        std::cout << "│  " << static_cast<int>(N) << "   " << static_cast<int>(V) << "   " << static_cast<int>(U)
-                  << "   " << static_cast<int>(B) << "   " << static_cast<int>(D) << "   " << static_cast<int>(I)
-                  << "   " << static_cast<int>(Z) << "   " << static_cast<int>(C) << "              │\n";
+        std::cout << "│  " << static_cast<int>(FLAGS_N) << "   " << static_cast<int>(FLAGS_V) << "   "
+                  << static_cast<int>(FLAGS_U) << "   " << static_cast<int>(FLAGS_B) << "   "
+                  << static_cast<int>(FLAGS_D) << "   " << static_cast<int>(FLAGS_I) << "   "
+                  << static_cast<int>(FLAGS_Z) << "   " << static_cast<int>(FLAGS_C) << "              │\n";
 
         std::cout << "└─────────────────────────────────────────────┘" << colors::RESET << "\n";
 

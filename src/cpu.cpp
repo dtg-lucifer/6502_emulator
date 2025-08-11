@@ -7,11 +7,6 @@
 #include "instructions.h"
 #include "op_codes.h"
 
-void Cpu::LDA_SetFlags() {
-    Z = (A == 0);              // Set the Zero flag
-    N = (A & 0b10000000) > 0;  // Set the Negative flag (if the 8th bit is 1, that means its the sign bit)
-}
-
 byte& Cpu::get(const Register r) {
     return registers[static_cast<byte>(r)];
 }
@@ -21,12 +16,19 @@ void Cpu::set(Register r, byte val) {
 }
 
 void Cpu::reset(Mem& mem) {
-    PC = 0xFFFC;                        // Reset the Program counter to its original position
-    SP = 0xFF;                          // Reset the stack pointer to its original position (top of stack)
-    C = Z = I = D = B = V = N = U = 0;  // Reset the flags
-    A = 0;                              // Reset accumulator
-    X = 0;                              // Reset X register
-    Y = 0;                              // Reset Y register
+    PC = 0xFFFC;  // Reset the Program counter to its original position
+    SP = 0xFF;    // Reset the stack pointer to its original position (top of stack)
+    A = 0;        // Reset accumulator
+    X = 0;        // Reset X register
+    Y = 0;        // Reset Y register
+    FLAGS_B = 0;  // Clear the Break flag
+    FLAGS_D = 0;  // Clear the Decimal mode flag
+    FLAGS_I = 1;  // Set the Interrupt Disable flag (I bit is set
+    FLAGS_Z = 1;  // Set the Zero flag (Z bit is set)
+    FLAGS_C = 0;  // Clear the Carry flag (C bit is cleared)
+    FLAGS_U = 1;  // Set the Unused/expansion flag (U bit is set)
+    FLAGS_V = 0;  // Clear the Overflow flag (V bit is cleared)
+    FLAGS_N = 0;  // Clear the Negative flag (N bit is cleared)
 
     mem.init();
 }
@@ -219,6 +221,12 @@ i32 Cpu::execute(i32 cycles, Mem& mem, bool* completed_out, bool testing_env) {
             // Control FLOW and Miscellaneous
             case op(Op::JSR):
                 instructions::JSR(*this, cycles, mem);
+                break;
+            case op(Op::JMP):
+                instructions::JMP(*this, cycles, mem);
+                break;
+            case op(Op::JMPI):
+                instructions::JMPI(*this, cycles, mem);
                 break;
             case op(Op::RTS):
                 instructions::RTS(*this, cycles, mem);
