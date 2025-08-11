@@ -18,7 +18,9 @@ graph TD
         InstrSet["Instruction Set"]
         InstrSet --> LDA["Load Instructions<br>(LDA, LDX, LDY)"]
         InstrSet --> STA["Store Instructions<br>(STA, STX, STY)"]
-        InstrSet --> Control["Control Instructions<br>(JSR, RTS, NOP)"]
+        InstrSet --> Stack["Stack Operations<br>(PHA, PHP, PLA, PLP, TXS, TSX)"]
+        InstrSet --> Jump["Jump Instructions<br>(JMP, JSR, RTS)"]
+        InstrSet --> Control["Control Instructions<br>(NOP)"]
     end
 
     subgraph "Testing & Debugging"
@@ -130,6 +132,7 @@ The emulator uses a cycle-based execution model:
 3. The CPU returns the number of cycles actually used
 
 This cycle-accurate approach allows the emulator to:
+
 - Maintain proper timing between instructions
 - Support cycle-stealing effects when crossing page boundaries
 - Provide accurate performance metrics

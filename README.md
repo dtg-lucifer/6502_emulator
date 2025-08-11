@@ -65,6 +65,8 @@ The emulator currently implements:
 - Instruction implementations:
     - Load/Store operations (LDA, LDX, LDY, STA, STX, STY)
     - Subroutine handling (JSR, RTS)
+    - Stack operations (PHA, PHP, PLA, PLP, TXS, TSX)
+    - Jump instructions (JMP absolute, JMP indirect)
     - No Operation (NOP)
 
 ## 🔨 Development

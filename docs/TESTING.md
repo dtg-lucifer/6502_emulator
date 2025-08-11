@@ -31,6 +31,8 @@ graph TD
     InstructionTests --> STY["STY Tests"]
     InstructionTests --> JSR["JSR Tests"]
     InstructionTests --> RTS["RTS Tests"]
+    InstructionTests --> JMP["JMP Tests"]
+    InstructionTests --> Stack["Stack Operation Tests"]
 ```
 
 ## Test Suite Components
@@ -90,77 +92,90 @@ The project includes tests for the following instructions and addressing modes:
 
 ### LDA (Load Accumulator) Tests
 
-| Test | Description |
-|------|-------------|
-| `inline_lda_test` | Tests LDA immediate mode |
-| `inline_lda_zp_test` | Tests LDA zero page mode |
-| `inline_lda_zpx_test` | Tests LDA zero page,X mode |
+| Test                       | Description                                 |
+| -------------------------- | ------------------------------------------- |
+| `inline_lda_test`          | Tests LDA immediate mode                    |
+| `inline_lda_zp_test`       | Tests LDA zero page mode                    |
+| `inline_lda_zpx_test`      | Tests LDA zero page,X mode                  |
 | `inline_lda_zpx_wrap_test` | Tests LDA zero page,X with address wrapping |
-| `inline_lda_absolute_test` | Tests LDA absolute mode |
-| `inline_lda_absx_test` | Tests LDA absolute,X mode |
-| `inline_lda_absy_test` | Tests LDA absolute,Y mode |
-| `inline_lda_indx_test` | Tests LDA (indirect,X) mode |
-| `inline_lda_indy_test` | Tests LDA (indirect),Y mode |
+| `inline_lda_absolute_test` | Tests LDA absolute mode                     |
+| `inline_lda_absx_test`     | Tests LDA absolute,X mode                   |
+| `inline_lda_absy_test`     | Tests LDA absolute,Y mode                   |
+| `inline_lda_indx_test`     | Tests LDA (indirect,X) mode                 |
+| `inline_lda_indy_test`     | Tests LDA (indirect),Y mode                 |
 
 ### LDX (Load X Register) Tests
 
-| Test | Description |
-|------|-------------|
-| `inline_ldx_test` | Tests LDX immediate mode |
-| `inline_ldx_zp_test` | Tests LDX zero page mode |
-| `inline_ldx_zpy_test` | Tests LDX zero page,Y mode |
+| Test                       | Description                                 |
+| -------------------------- | ------------------------------------------- |
+| `inline_ldx_test`          | Tests LDX immediate mode                    |
+| `inline_ldx_zp_test`       | Tests LDX zero page mode                    |
+| `inline_ldx_zpy_test`      | Tests LDX zero page,Y mode                  |
 | `inline_ldx_zpy_wrap_test` | Tests LDX zero page,Y with address wrapping |
-| `inline_ldx_absolute_test` | Tests LDX absolute mode |
-| `inline_ldx_absy_test` | Tests LDX absolute,Y mode |
+| `inline_ldx_absolute_test` | Tests LDX absolute mode                     |
+| `inline_ldx_absy_test`     | Tests LDX absolute,Y mode                   |
 
 ### LDY (Load Y Register) Tests
 
-| Test | Description |
-|------|-------------|
-| `inline_ldy_test` | Tests LDY immediate mode |
-| `inline_ldy_zp_test` | Tests LDY zero page mode |
-| `inline_ldy_zpx_test` | Tests LDY zero page,X mode |
+| Test                       | Description                                 |
+| -------------------------- | ------------------------------------------- |
+| `inline_ldy_test`          | Tests LDY immediate mode                    |
+| `inline_ldy_zp_test`       | Tests LDY zero page mode                    |
+| `inline_ldy_zpx_test`      | Tests LDY zero page,X mode                  |
 | `inline_ldy_zpx_wrap_test` | Tests LDY zero page,X with address wrapping |
-| `inline_ldy_absolute_test` | Tests LDY absolute mode |
-| `inline_ldy_absx_test` | Tests LDY absolute,X mode |
+| `inline_ldy_absolute_test` | Tests LDY absolute mode                     |
+| `inline_ldy_absx_test`     | Tests LDY absolute,X mode                   |
 
 ### STA (Store Accumulator) Tests
 
-| Test | Description |
-|------|-------------|
-| `inline_sta_zp_test` | Tests STA zero page mode |
-| `inline_sta_zpx_test` | Tests STA zero page,X mode |
+| Test                       | Description                                 |
+| -------------------------- | ------------------------------------------- |
+| `inline_sta_zp_test`       | Tests STA zero page mode                    |
+| `inline_sta_zpx_test`      | Tests STA zero page,X mode                  |
 | `inline_sta_zpx_wrap_test` | Tests STA zero page,X with address wrapping |
-| `inline_sta_absolute_test` | Tests STA absolute mode |
-| `inline_sta_absx_test` | Tests STA absolute,X mode |
-| `inline_sta_absy_test` | Tests STA absolute,Y mode |
-| `inline_sta_indx_test` | Tests STA (indirect,X) mode |
-| `inline_sta_indy_test` | Tests STA (indirect),Y mode |
+| `inline_sta_absolute_test` | Tests STA absolute mode                     |
+| `inline_sta_absx_test`     | Tests STA absolute,X mode                   |
+| `inline_sta_absy_test`     | Tests STA absolute,Y mode                   |
+| `inline_sta_indx_test`     | Tests STA (indirect,X) mode                 |
+| `inline_sta_indy_test`     | Tests STA (indirect),Y mode                 |
 
 ### STX (Store X Register) Tests
 
-| Test | Description |
-|------|-------------|
-| `inline_stx_zp_test` | Tests STX zero page mode |
-| `inline_stx_zpy_test` | Tests STX zero page,Y mode |
+| Test                       | Description                                 |
+| -------------------------- | ------------------------------------------- |
+| `inline_stx_zp_test`       | Tests STX zero page mode                    |
+| `inline_stx_zpy_test`      | Tests STX zero page,Y mode                  |
 | `inline_stx_zpy_wrap_test` | Tests STX zero page,Y with address wrapping |
-| `inline_stx_absolute_test` | Tests STX absolute mode |
+| `inline_stx_absolute_test` | Tests STX absolute mode                     |
 
 ### STY (Store Y Register) Tests
 
-| Test | Description |
-|------|-------------|
-| `inline_sty_zp_test` | Tests STY zero page mode |
-| `inline_sty_zpx_test` | Tests STY zero page,X mode |
+| Test                       | Description                                 |
+| -------------------------- | ------------------------------------------- |
+| `inline_sty_zp_test`       | Tests STY zero page mode                    |
+| `inline_sty_zpx_test`      | Tests STY zero page,X mode                  |
 | `inline_sty_zpx_wrap_test` | Tests STY zero page,X with address wrapping |
-| `inline_sty_absolute_test` | Tests STY absolute mode |
+| `inline_sty_absolute_test` | Tests STY absolute mode                     |
 
 ### Control Flow Tests
 
-| Test | Description |
-|------|-------------|
-| `inline_jsr_rts_test` | Tests JSR and RTS instructions |
-| `inline_invalid_opcode_test` | Tests handling of invalid opcodes |
+| Test                           | Description                          |
+| ------------------------------ | ------------------------------------ |
+| `inline_jsr_rts_test`          | Tests JSR and RTS instructions       |
+| `inline_jmp_absolute_test`     | Tests JMP absolute instruction       |
+| `inline_jmp_indirect_test`     | Tests JMP indirect instruction       |
+| `inline_jmp_indirect_bug_test` | Tests JMP indirect page boundary bug |
+| `inline_invalid_opcode_test`   | Tests handling of invalid opcodes    |
+
+### Stack Operation Tests
+
+| Test                           | Description                                                       |
+| ------------------------------ | ----------------------------------------------------------------- |
+| `inline_pha_pla_test`          | Tests PHA (Push Accumulator) and PLA (Pull Accumulator)           |
+| `inline_php_plp_test`          | Tests PHP (Push Processor Status) and PLP (Pull Processor Status) |
+| `inline_txs_test`              | Tests TXS (Transfer X to Stack Pointer)                           |
+| `inline_tsx_test`              | Tests TSX (Transfer Stack Pointer to X)                           |
+| `inline_stack_operations_test` | Tests combined stack operations                                   |
 
 ## Running Tests
 
@@ -171,6 +186,7 @@ make test
 ```
 
 This will:
+
 1. Configure the build system with testing enabled
 2. Build the test executable
 3. Run all tests and display the results
@@ -244,6 +260,8 @@ The current test suite covers:
 - Flag behavior
 - Error handling
 - Edge cases (e.g., page boundary crossing, address wrapping)
+- Hardware quirks (e.g., JMP indirect page boundary bug)
+- Stack operations
 
 ## Debugging Tests
 

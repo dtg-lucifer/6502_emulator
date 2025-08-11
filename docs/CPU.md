@@ -6,29 +6,29 @@ The 6502 processor is an 8-bit microprocessor with a 16-bit address bus, allowin
 
 The 6502 has a minimal but effective register set. Our implementation follows the original hardware closely.
 
-| Register | Size  | Description |
-|----------|-------|-------------|
-| A        | 8-bit | Accumulator - Primary register for arithmetic and logic operations |
-| X        | 8-bit | X Index Register - Used for indexing and counters |
-| Y        | 8-bit | Y Index Register - Used for indexing and counters |
-| PC       | 16-bit | Program Counter - Points to the next instruction to execute |
-| SP       | 8-bit | Stack Pointer - Points to the next free location on the stack (0x0100-0x01FF) |
-| P        | 8-bit | Processor Status - Contains status flags |
+| Register | Size   | Description                                                                   |
+| -------- | ------ | ----------------------------------------------------------------------------- |
+| A        | 8-bit  | Accumulator - Primary register for arithmetic and logic operations            |
+| X        | 8-bit  | X Index Register - Used for indexing and counters                             |
+| Y        | 8-bit  | Y Index Register - Used for indexing and counters                             |
+| PC       | 16-bit | Program Counter - Points to the next instruction to execute                   |
+| SP       | 8-bit  | Stack Pointer - Points to the next free location on the stack (0x0100-0x01FF) |
+| P        | 8-bit  | Processor Status - Contains status flags                                      |
 
 ## Status Flags (P Register)
 
 The status register contains several single-bit flags that control or reflect the CPU state.
 
-| Bit | Flag | Symbol | Description |
-|-----|------|--------|-------------|
-| 7   | Negative | N | Set if the result of the last operation has bit 7 set (is negative) |
-| 6   | Overflow | V | Set if the last operation caused a signed arithmetic overflow |
-| 5   | Unused   | U | Not used, typically set to 1 |
-| 4   | Break    | B | Set when BRK instruction is executed |
-| 3   | Decimal  | D | Set when processor is in BCD (Binary Coded Decimal) mode |
-| 2   | Interrupt Disable | I | Set when interrupts are disabled |
-| 1   | Zero     | Z | Set if the result of the last operation was zero |
-| 0   | Carry    | C | Set if the last operation resulted in a carry or during shifts |
+| Bit | Flag              | Symbol | Description                                                         |
+| --- | ----------------- | ------ | ------------------------------------------------------------------- |
+| 7   | Negative          | N      | Set if the result of the last operation has bit 7 set (is negative) |
+| 6   | Overflow          | V      | Set if the last operation caused a signed arithmetic overflow       |
+| 5   | Unused            | U      | Not used, typically set to 1                                        |
+| 4   | Break             | B      | Set when BRK instruction is executed                                |
+| 3   | Decimal           | D      | Set when processor is in BCD (Binary Coded Decimal) mode            |
+| 2   | Interrupt Disable | I      | Set when interrupts are disabled                                    |
+| 1   | Zero              | Z      | Set if the result of the last operation was zero                    |
+| 0   | Carry             | C      | Set if the last operation resulted in a carry or during shifts      |
 
 ## CPU Register Representation
 
@@ -72,15 +72,34 @@ The 6502 has a fixed 256-byte stack located in page 1 of memory (addresses 0x010
 
 - On reset, SP is initialized to 0xFF (stack address 0x01FF)
 - When pushing a byte onto the stack:
-  1. The byte is stored at the address (0x0100 + SP)
-  2. SP is decremented
+    1. The byte is stored at the address (0x0100 + SP)
+    2. SP is decremented
 - When pulling a byte from the stack:
-  1. SP is incremented
-  2. The byte is read from address (0x0100 + SP)
+    1. SP is incremented
+    2. The byte is read from address (0x0100 + SP)
+
+### Stack-Related Instructions
+
+The emulator implements the following stack operations:
+
+| Instruction | Description                 | Flags Affected |
+| ----------- | --------------------------- | -------------- |
+| PHA         | Push Accumulator            | None           |
+| PHP         | Push Processor Status       | None           |
+| PLA         | Pull Accumulator            | N, Z           |
+| PLP         | Pull Processor Status       | All            |
+| TXS         | Transfer X to Stack Pointer | None           |
+| TSX         | Transfer Stack Pointer to X | N, Z           |
+
+### Status Flag Handling
+
+- When executing PHP (Push Processor Status), the status register is pushed to the stack with the Break flag (B) and bit 5 set to 1
+- When executing PLP (Pull Processor Status), the status register is restored from the stack, but the Break flag is not changed
 
 ### 16-bit Value Handling
 
 For 16-bit values (like addresses for JSR/RTS):
+
 - The high byte is pushed first, then the low byte
 - The low byte is pulled first, then the high byte
 
@@ -94,6 +113,13 @@ graph TD
     subgraph "Pull Operation"
         Pull["Pull Byte"] --> IncrementSP["Increment SP"]
         IncrementSP --> Load["Load from 0x0100+SP"]
+    end
+
+    subgraph "Stack Instruction Flow"
+        PHA["PHA (Push A)"] --> StoreTOS["Store A at Stack"]
+        PHP["PHP (Push P)"] --> SetBitsPush["Set B and bit 5"] --> StorePTOS["Store P at Stack"]
+        PLA["PLA (Pull A)"] --> LoadFromStack["Load A from Stack"] --> UpdateFlags["Update N,Z flags"]
+        PLP["PLP (Pull P)"] --> LoadPFromStack["Load P from Stack"] --> PreserveBFlag["Preserve B flag"]
     end
 ```
 
@@ -134,12 +160,12 @@ class Cpu {
 
 ### Key Methods
 
-| Method | Description |
-|--------|-------------|
-| `reset(Mem& mem)` | Initializes the CPU to its power-on state |
-| `fetch_byte(i32& cycles, Mem& mem)` | Fetches a byte from memory at PC, increments PC, and decrements cycles |
-| `fetch_word(i32& cycles, Mem& mem)` | Fetches a 16-bit word from memory (little-endian) |
-| `execute(i32 cycles, Mem& mem, bool* completed, bool testing_env)` | Executes instructions for the specified number of cycles |
+| Method                                                             | Description                                                            |
+| ------------------------------------------------------------------ | ---------------------------------------------------------------------- |
+| `reset(Mem& mem)`                                                  | Initializes the CPU to its power-on state                              |
+| `fetch_byte(i32& cycles, Mem& mem)`                                | Fetches a byte from memory at PC, increments PC, and decrements cycles |
+| `fetch_word(i32& cycles, Mem& mem)`                                | Fetches a 16-bit word from memory (little-endian)                      |
+| `execute(i32 cycles, Mem& mem, bool* completed, bool testing_env)` | Executes instructions for the specified number of cycles               |
 
 ## Execution Cycle
 
