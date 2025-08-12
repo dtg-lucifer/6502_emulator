@@ -5,6 +5,10 @@ project(6502_cpu_emulator)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+# Find required packages
+# Only require SDL2 for audio
+find_package(SDL2 REQUIRED)
+
 # Output directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
@@ -40,11 +44,22 @@ add_library(emulator_core
     src/instructions/pha.cpp
     src/instructions/txs.cpp
     src/instructions/tsx.cpp
+    # NES System components
+    src/nes/nes.cpp
+    src/nes/simplified_ppu.cpp
+    src/nes/cartridge.cpp
+    src/nes/apu.cpp
 )
 
 # Make includes available to any target linking against emulator_core
 target_include_directories(emulator_core PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${SDL2_INCLUDE_DIRS}
+)
+
+# Link against required libraries
+target_link_libraries(emulator_core PUBLIC
+    ${SDL2_LIBRARIES}
 )
 
 # Add option for enabling test code
@@ -78,8 +93,16 @@ else()
         src/main.cpp
     )
 
+    # Add NES emulator executable
+    add_executable(nes_emulator
+        src/nes_main.cpp
+    )
+
     # Link the main executable with the core library
     target_link_libraries(6502_cpu_emulator PRIVATE emulator_core)
+
+    # Link the NES emulator with the core library
+    target_link_libraries(nes_emulator PRIVATE emulator_core)
 endif()
 
 # Create a symbolic link to compile_commands.json in the source directory

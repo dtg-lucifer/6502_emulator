@@ -1,3 +1,6 @@
+#ifndef COLORS_H
+#define COLORS_H
+
 namespace colors {
 const char* const RESET = "\033[0m";
 const char* const RED = "\033[31m";
@@ -9,3 +12,5 @@ const char* const CYAN = "\033[36m";
 const char* const WHITE = "\033[37m";
 const char* const BOLD = "\033[1m";
 }  // namespace colors
+
+#endif  // COLORS_H
