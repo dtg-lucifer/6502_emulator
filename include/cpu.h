@@ -38,6 +38,74 @@ class Cpu {
         };
     };
 
+    // Pin layout for MOS 6502 with address/data bus access
+    union {
+        pinl_t PINS;  // Raw access to all pins at once
+
+        // === Individual pin mapping ===
+        struct {
+            pinl_t PIN_1 : 1;  // VSS   - Ground
+            pinl_t PIN_2 : 1;  // RDY   - Ready (halts CPU when low)
+            pinl_t PIN_3 : 1;  // PHI1O - Phase 1 clock output
+            pinl_t PIN_4 : 1;  // IRQB  - Interrupt Request (active low)
+            pinl_t PIN_5 : 1;  // NC    - Not connected
+            pinl_t PIN_6 : 1;  // NMIB  - Non-Maskable Interrupt (active low)
+            pinl_t PIN_7 : 1;  // SYNC  - Indicates opcode fetch
+            pinl_t PIN_8 : 1;  // VCC   - +5V power
+
+            // Address bus (low half)
+            pinl_t A0 : 1;   // Address line bit 0
+            pinl_t A1 : 1;   // Address line bit 1
+            pinl_t A2 : 1;   // Address line bit 2
+            pinl_t A3 : 1;   // Address line bit 3
+            pinl_t A4 : 1;   // Address line bit 4
+            pinl_t A5 : 1;   // Address line bit 5
+            pinl_t A6 : 1;   // Address line bit 6
+            pinl_t A7 : 1;   // Address line bit 7
+            pinl_t A8 : 1;   // Address line bit 8
+            pinl_t A9 : 1;   // Address line bit 9
+            pinl_t A10 : 1;  // Address line bit 10
+            pinl_t A11 : 1;  // Address line bit 11
+
+            pinl_t VSS2 : 1;  // VSS   - Ground (second ground at pin 21)
+
+            // Address bus (high half)
+            pinl_t A12 : 1;  // Address line bit 12
+            pinl_t A13 : 1;  // Address line bit 13
+            pinl_t A14 : 1;  // Address line bit 14
+            pinl_t A15 : 1;  // Address line bit 15
+
+            // Data bus
+            pinl_t D7 : 1;  // Data line bit 7
+            pinl_t D6 : 1;  // Data line bit 6
+            pinl_t D5 : 1;  // Data line bit 5
+            pinl_t D4 : 1;  // Data line bit 4
+            pinl_t D3 : 1;  // Data line bit 3
+            pinl_t D2 : 1;  // Data line bit 2
+            pinl_t D1 : 1;  // Data line bit 1
+            pinl_t D0 : 1;  // Data line bit 0
+
+            pinl_t RWB : 1;    // Read (high) / Write (low)
+            pinl_t NC36 : 1;   // NC
+            pinl_t NC37 : 1;   // NC
+            pinl_t PHI0 : 1;   // PHI0 - External clock input
+            pinl_t S0 : 1;     // S0
+            pinl_t PHI2O : 1;  // PHI2O - Phase 2 clock output
+            pinl_t RESB : 1;   // Reset (active low)
+        };
+
+        // === Packed access to buses ===
+        struct {
+            pinl_t _skipA0 : 8;  // Skip non-address pins before A0
+            pinl_t ADDR : 16;    // A0..A15 (low to high bit order)
+        } addr_bus;
+
+        struct {
+            pinl_t _skipD0 : 24;  // Skip pins before D7
+            pinl_t DATA : 8;      // D7..D0
+        } data_bus;
+    };
+
     // Register access methods
     byte& get(const Register r);
     void set(Register r, byte val);

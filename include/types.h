@@ -6,6 +6,7 @@
 // Basic types used throughout the emulator
 using byte = uint8_t;
 using word = uint16_t;
+using pinl_t = uint32_t;
 
 using u32 = unsigned int;
 using i32 = int;
