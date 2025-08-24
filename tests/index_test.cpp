@@ -124,6 +124,23 @@ bool run_all_tests(Cpu& cpu, Mem& mem) {
     // Run Stack Operations tests
     stack_operations_test_suite(cpu, mem);
 
+    // Run Logical Operations tests
+    and_test_suite(cpu, mem);
+    eor_test_suite(cpu, mem);
+    ora_test_suite(cpu, mem);
+
+    // Run Status Flag Operations tests
+    status_flag_test_suite(cpu, mem);
+
+    // Run Bit Manipulation tests
+    bit_manipulation_test_suite(cpu, mem);
+
+    // Run Shifts and Rotates tests
+    shifts_rotates_test_suite(cpu, mem);
+
+    // Run Branch Operations tests
+    branch_test_suite(cpu, mem);
+
     // Return true if all tests passed
     // Since the JMP test suite doesn't return a failed count, we're assuming it's successful
     // if the execution reaches this point (as failed tests throw exceptions)

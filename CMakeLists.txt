@@ -68,6 +68,13 @@ if(ENABLE_TESTING)
         tests/stx_test.cpp
         tests/sty_test.cpp
         tests/stack_operations_test.cpp
+        tests/and_test.cpp
+        tests/eor_test.cpp
+        tests/ora_test.cpp
+        tests/status_flag_test.cpp
+        tests/bit_manipulation_test.cpp
+        tests/shifts_rotates_test.cpp
+        tests/branch_test.cpp
     )
 
     # Link the test executable with the core library
