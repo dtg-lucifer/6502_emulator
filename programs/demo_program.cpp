@@ -10,47 +10,57 @@ namespace demo_programs {
 // with various addressing modes
 std::map<u32, std::vector<byte>> get_lda_demo() {
     std::map<u32, std::vector<byte>> demo = {
-        // Program entry point (JSR to main routine)
-        {0xFFFC, {op(Op::JSR), 0x00, 0x20}},
+        // Reset vector points to 0x2000 (low byte first, then high byte)
+        {0xFFFC, {0x00, 0x20}},
 
         // Main routine at 0x2000
         // Test LDA instructions with various addressing modes
         {0x2000,
-         {// LDA Immediate
-          op(Op::LDA_IM), 0x42,
+         {
+             // LDA Immediate
+             op(Op::LDA_IM),
+             0x42,
 
-          // LDA Zero Page
-          op(Op::LDA_ZP), 0x80,
+             // LDA Zero Page
+             op(Op::LDA_ZP),
+             0x80,
 
-          // LDA Zero Page,X
-          op(Op::LDA_ZPX), 0x70,
+             // LDA Zero Page,X
+             op(Op::LDA_ZPX),
+             0x70,
 
-          // LDA Absolute
-          op(Op::LDA_AB), 0x00, 0x30,
+             // LDA Absolute
+             op(Op::LDA_AB),
+             0x00,
+             0x30,
 
-          // LDA Absolute,X
-          op(Op::LDA_ABSX), 0x10, 0x30,
+             // LDA Absolute,X
+             op(Op::LDA_ABSX),
+             0x10,
+             0x30,
 
-          // LDA Absolute,Y
-          op(Op::LDA_ABSY), 0x20, 0x30,
+             // LDA Absolute,Y
+             op(Op::LDA_ABSY),
+             0x20,
+             0x30,
 
-          // Test indirect addressing modes
-          // LDA (Indirect,X)
-          op(Op::LDA_INX), 0x90,
+             // Test indirect addressing modes
+             // LDA (Indirect,X)
+             op(Op::LDA_INX),
+             0x90,
 
-          // LDA (Indirect),Y
-          op(Op::LDA_INY), 0x92,
-
-          // Return from the main program
-          op(Op::RTS)}},
-        // Subroutine at 0x2080
+             // LDA (Indirect),Y
+             op(Op::LDA_INY),
+             0x92,
+         }},
 
         // Subroutine at 0x2050
         {0x2050,
-         {// Do something in the subroutine
-          op(Op::LDA_IM), 0xFF,
-          // Return from subroutine
-          op(Op::RTS)}},
+         {
+             // Do something in the subroutine
+             op(Op::LDA_IM),
+             0xFF,
+         }},
 
         // Data for various addressing modes
         {0x0080, {0x55}},  // Zero page data for LDA_ZP
@@ -76,8 +86,8 @@ std::map<u32, std::vector<byte>> get_lda_demo() {
 // with various addressing modes
 std::map<u32, std::vector<byte>> get_ldx_demo() {
     std::map<u32, std::vector<byte>> demo = {
-        // Program entry point (JSR to main routine)
-        {0xFFFC, {op(Op::JSR), 0x00, 0x20}},
+        // Reset vector points to 0x2000 (low byte first, then high byte)
+        {0xFFFC, {0x00, 0x20}},
 
         // Main routine at 0x2000
         {0x2000,
@@ -96,8 +106,8 @@ std::map<u32, std::vector<byte>> get_ldx_demo() {
           // LDX Absolute,Y
           op(Op::LDX_ABSY), 0x60, 0x30,
 
-          // Return from the main program
-          op(Op::RTS)}},
+          // Use BRK to exit the program instead of RTS
+          0x00}},  // BRK instruction (0x00)
 
         // Data for various addressing modes
         {0x00A0, {0xCC}},  // Zero page data for LDX_ZP
@@ -113,8 +123,8 @@ std::map<u32, std::vector<byte>> get_ldx_demo() {
 // with various addressing modes
 std::map<u32, std::vector<byte>> get_ldy_demo() {
     std::map<u32, std::vector<byte>> demo = {
-        // Program entry point (JSR to main routine)
-        {0xFFFC, {op(Op::JSR), 0x00, 0x20}},
+        // Reset vector points to 0x2000 (low byte first, then high byte)
+        {0xFFFC, {0x00, 0x20}},
 
         // Main routine at 0x2000
         {0x2000,
@@ -133,8 +143,8 @@ std::map<u32, std::vector<byte>> get_ldy_demo() {
           // LDY Absolute,X
           op(Op::LDY_ABSX), 0x80, 0x30,
 
-          // Return from the main program
-          op(Op::RTS)}},
+          // Use BRK to exit the program instead of RTS
+          0x00}},  // BRK instruction (0x00)
 
         // Data for various addressing modes
         {0x00B0, {0x11}},  // Zero page data for LDY_ZP
@@ -149,8 +159,8 @@ std::map<u32, std::vector<byte>> get_ldy_demo() {
 // Combined instruction demo that runs all types of instructions
 std::map<u32, std::vector<byte>> get_instruction_demo() {
     std::map<u32, std::vector<byte>> demo = {
-        // Program entry point (JSR to main routine)
-        {0xFFFC, {op(Op::JSR), 0x00, 0x20}},
+        // Reset vector points to 0x2000 (low byte first, then high byte)
+        {0xFFFC, {0x00, 0x20}},
 
         // Main routine at 0x2000
         // Test LDA instructions with various addressing modes
@@ -220,15 +230,15 @@ std::map<u32, std::vector<byte>> get_instruction_demo() {
           // NOP instructions
           op(Op::NOP), op(Op::NOP),
 
-          // Return from the main program
-          op(Op::RTS)}},
+          // Use BRK to exit the program instead of RTS
+          0x00}},  // BRK instruction (0x00)
 
         // Subroutine at 0x2050
         {0x2050,
          {// Do something in the subroutine
           op(Op::LDA_IM), 0xFF,
           // Return from subroutine
-          op(Op::RTS)}},
+          0x00}},  // BRK instruction (0x00)
 
         // Data for various addressing modes
         {0x0080, {0x55}},  // Zero page data for LDA_ZP
@@ -282,7 +292,7 @@ std::map<u32, std::vector<byte>> get_counter_program() {
              0x4C, 0x02, 0x80,  // JMP $8002 opcode and address
          }},
 
-        // Reset vector pointing to the program start
+        // Reset vector points to 0x8000 (low byte first, then high byte)
         {0xFFFC, {0x00, 0x80}},
     };
 

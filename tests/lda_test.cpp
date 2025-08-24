@@ -7,7 +7,7 @@ using namespace colors;
 
 namespace testing {
 void inline_lda_test(Cpu& cpu, Mem& mem) {
-    cpu.reset(mem);
+    cpu.reset(mem, false);  // Don't use reset vector in tests
 
     // Inline test for LDA instruction
     mem[0xFFFC] = op(Op::LDA_IM);  // Load immediate
@@ -42,7 +42,7 @@ void inline_lda_test(Cpu& cpu, Mem& mem) {
 }
 
 void inline_lda_zp_test(Cpu& cpu, Mem& mem) {
-    cpu.reset(mem);
+    cpu.reset(mem, false);  // Don't use reset vector in tests
 
     // Inline test for LDA instruction
     mem[0xFFFC] = op(Op::LDA_ZP);  // Load Zero Page value
@@ -70,7 +70,7 @@ void inline_lda_zp_test(Cpu& cpu, Mem& mem) {
 }
 
 void inline_lda_absolute_test(Cpu& cpu, Mem& mem) {
-    cpu.reset(mem);
+    cpu.reset(mem, false);  // Don't use reset vector in tests
 
     // Inline test for LDA instruction
     mem[0xFFFC] = op(Op::LDA_AB);  // Load Zero Page value
@@ -108,7 +108,7 @@ void inline_lda_absolute_test(Cpu& cpu, Mem& mem) {
 }
 
 void inline_lda_zpx_test(Cpu& cpu, Mem& mem) {
-    cpu.reset(mem);
+    cpu.reset(mem, false);  // Don't use reset vector in tests
 
     // Inline test for LDA instruction
     mem[0xFFFC] = op(Op::LDA_ZPX);  // Load Zero Page with X
@@ -140,7 +140,7 @@ void inline_lda_zpx_test(Cpu& cpu, Mem& mem) {
 }
 
 void inline_lda_zpx_wrap_test(Cpu& cpu, Mem& mem) {
-    cpu.reset(mem);
+    cpu.reset(mem, false);  // Don't use reset vector in tests
 
     // Inline test for LDA instruction
     mem[0xFFFC] = op(Op::LDA_ZPX);  // Load Zero Page with X
@@ -173,7 +173,7 @@ void inline_lda_zpx_wrap_test(Cpu& cpu, Mem& mem) {
     }
 }
 void inline_lda_absx_test(Cpu& cpu, Mem& mem) {
-    cpu.reset(mem);
+    cpu.reset(mem, false);  // Don't use reset vector in tests
 
     // Inline test for LDA_ABSX instruction
     mem[0xFFFC] = op(Op::LDA_ABSX);  // Load Absolute,X
@@ -235,7 +235,7 @@ void inline_lda_absx_test(Cpu& cpu, Mem& mem) {
 }
 
 void inline_lda_absy_test(Cpu& cpu, Mem& mem) {
-    cpu.reset(mem);
+    cpu.reset(mem, false);  // Don't use reset vector in tests
 
     // Inline test for LDA_ABSY instruction
     mem[0xFFFC] = op(Op::LDA_ABSY);  // Load Absolute,Y
@@ -273,7 +273,7 @@ void inline_lda_absy_test(Cpu& cpu, Mem& mem) {
     }
 
     // Test with a negative value to verify N flag
-    cpu.reset(mem);
+    cpu.reset(mem, false);           // Don't use reset vector in tests
     mem[0xFFFC] = op(Op::LDA_ABSY);  // Load Absolute,Y
     mem[0xFFFD] = 0x80;              // Low byte of address
     mem[0xFFFE] = 0x44;              // High byte of address (0x4480)
@@ -294,7 +294,7 @@ void inline_lda_absy_test(Cpu& cpu, Mem& mem) {
 }
 
 void inline_lda_indx_test(Cpu& cpu, Mem& mem) {
-    cpu.reset(mem);
+    cpu.reset(mem, false);  // Don't use reset vector in tests
 
     // Inline test for LDA_INX instruction (Indexed Indirect)
     mem[0xFFFC] = op(Op::LDA_INX);  // Load (Indirect,X)
@@ -335,7 +335,7 @@ void inline_lda_indx_test(Cpu& cpu, Mem& mem) {
     }
 
     // Test with zero value to verify Z flag
-    cpu.reset(mem);
+    cpu.reset(mem, false);          // Don't use reset vector in tests
     mem[0xFFFC] = op(Op::LDA_INX);  // Load (Indirect,X)
     mem[0xFFFD] = 0x20;             // Zero page address
     mem[0xFFFE] = op(Op::NOP);      // NOP
@@ -363,7 +363,7 @@ void inline_lda_indx_test(Cpu& cpu, Mem& mem) {
 }
 
 void inline_lda_indy_test(Cpu& cpu, Mem& mem) {
-    cpu.reset(mem);
+    cpu.reset(mem, false);  // Don't use reset vector in tests
 
     // Inline test for LDA_INY instruction (Indirect Indexed)
     mem[0xFFFC] = op(Op::LDA_INY);  // Load (Indirect),Y
@@ -404,7 +404,7 @@ void inline_lda_indy_test(Cpu& cpu, Mem& mem) {
     }
 
     // Test with zero-page wraparound
-    cpu.reset(mem);
+    cpu.reset(mem, false);          // Don't use reset vector in tests
     mem[0xFFFC] = op(Op::LDA_INY);  // Load (Indirect),Y
     mem[0xFFFD] = 0xFF;             // Zero page address at the end of zero page
     mem[0xFFFE] = op(Op::NOP);      // Add NOP instruction for termination

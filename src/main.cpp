@@ -15,18 +15,26 @@ int main() {
 
     std::cout << "\n==== RUNNING LDA INSTRUCTION DEMO ====\n";
 
-    cpu.reset(mem);
+    // First initialize memory
+    mem.init();
 
-    cpu.set(Register::X, 0x01);
-    cpu.set(Register::Y, 0x02);
-
+    // Load demo program into memory before reset
     auto lda_demo = demo_programs::get_lda_demo();
     binary_reader::read_from_array(cpu, mem, lda_demo);
 
-    bool program_completed = false;
-    i32 cycles_used = cpu.execute(100, mem, &program_completed);
+    // Reset CPU - this will now automatically load the PC from reset vector
+    cpu.reset(mem);
 
-    std::cout << "\nLDA Demo completed. Final CPU state:\n";
+    // Set initial register values after reset
+    cpu.set(Register::X, 0x05);  // Use X=5 to match the offsets in the demo program
+    cpu.set(Register::Y, 0x02);
+
+    std::cout << "CPU Program Counter after reset: 0x" << std::hex << cpu.PC << std::dec << std::endl;
+
+    bool program_completed = false;
+    i32 cycles_used = cpu.execute(0, mem, &program_completed);  // The cycle parameter is ignored, runs to completion
+
+    std::cout << "\nLDA Demo completed in " << cycles_used << " cycles. Final CPU state:\n";
     cpu.print_state(cycles_used, program_completed);
 
     return 0;
