@@ -17,7 +17,9 @@ void RTS(Cpu& cpu, i32& cycles, Mem& mem) {
     word return_addr = (hi << 8) | lo;
 
     // Set PC to return address + 1 (since JSR stored PC-1)
-    cpu.PC = return_addr + 1;
+    word new_pc = return_addr + 1;
+
+    cpu.PC = new_pc;
     cycles -= 2;  // Extra cycles for updating PC
 }
 

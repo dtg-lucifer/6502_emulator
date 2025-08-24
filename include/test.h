@@ -73,10 +73,55 @@ void inline_txs_test(Cpu& cpu, Mem& mem);
 // Invalid Opcode Test
 void inline_invalid_opcode_test(Cpu& cpu, Mem& mem);
 
+// AND Tests
+void inline_and_im_test(Cpu& cpu, Mem& mem);
+void inline_and_zp_test(Cpu& cpu, Mem& mem);
+void inline_and_zpx_test(Cpu& cpu, Mem& mem);
+void inline_and_abs_test(Cpu& cpu, Mem& mem);
+void inline_and_absx_test(Cpu& cpu, Mem& mem);
+void inline_and_absy_test(Cpu& cpu, Mem& mem);
+void inline_and_indx_test(Cpu& cpu, Mem& mem);
+void inline_and_indy_test(Cpu& cpu, Mem& mem);
+
+// EOR Tests
+void inline_eor_im_test(Cpu& cpu, Mem& mem);
+void inline_eor_zp_test(Cpu& cpu, Mem& mem);
+void inline_eor_zpx_test(Cpu& cpu, Mem& mem);
+void inline_eor_abs_test(Cpu& cpu, Mem& mem);
+void inline_eor_absx_test(Cpu& cpu, Mem& mem);
+void inline_eor_absy_test(Cpu& cpu, Mem& mem);
+void inline_eor_indx_test(Cpu& cpu, Mem& mem);
+void inline_eor_indy_test(Cpu& cpu, Mem& mem);
+
+// ORA Tests
+void inline_ora_im_test(Cpu& cpu, Mem& mem);
+void inline_ora_zp_test(Cpu& cpu, Mem& mem);
+void inline_ora_zpx_test(Cpu& cpu, Mem& mem);
+void inline_ora_abs_test(Cpu& cpu, Mem& mem);
+void inline_ora_absx_test(Cpu& cpu, Mem& mem);
+void inline_ora_absy_test(Cpu& cpu, Mem& mem);
+void inline_ora_indx_test(Cpu& cpu, Mem& mem);
+void inline_ora_indy_test(Cpu& cpu, Mem& mem);
+
 // Test suite functions
 void sta_test_suite(Cpu& cpu, Mem& mem);
 void stx_test_suite(Cpu& cpu, Mem& mem);
 void sty_test_suite(Cpu& cpu, Mem& mem);
+void and_test_suite(Cpu& cpu, Mem& mem);
+void eor_test_suite(Cpu& cpu, Mem& mem);
+void ora_test_suite(Cpu& cpu, Mem& mem);
+
+// Status flag operations
+void status_flag_test_suite(Cpu& cpu, Mem& mem);
+
+// Bit manipulation operations
+void bit_manipulation_test_suite(Cpu& cpu, Mem& mem);
+
+// Shifts and rotates operations
+void shifts_rotates_test_suite(Cpu& cpu, Mem& mem);
+
+// Branch operations
+void branch_test_suite(Cpu& cpu, Mem& mem);
 
 bool run_all_tests(Cpu& cpu, Mem& mem);
 

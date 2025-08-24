@@ -111,16 +111,20 @@ class Cpu {
     void set(Register r, byte val);
 
     // CPU operations
-    void reset(Mem& mem);
+    // Reset the CPU to its initial state
+    // If use_reset_vector is true, PC is set to the address at 0xFFFC-0xFFFD
+    // If false, PC is set to 0xFFFC (used for testing)
+    void reset(Mem& mem, bool use_reset_vector = true);
     byte fetch_byte(i32& cycles, Mem& mem);
     word fetch_word(i32& cycles, Mem& mem);
     byte read_byte(byte zp_addr, i32& cycles, Mem& mem);
-    // Execute CPU instructions for the given number of cycles
-    // Returns the number of cycles actually used
-    // Sets the completed flag to true if execution finished with RTS
+    // Execute CPU instructions until completion (RTS instruction)
+    // The cycles parameter is kept for backwards compatibility but is ignored
+    // Returns the number of cycles actually used by the CPU
+    // Sets the completed flag to true if execution finished successfully
     i32 execute(i32 cycles, Mem& mem, bool* completed = nullptr, bool testing_env = false);
 
-    i32 cpu_mode_decider(bool manual_mode, i32& cycles, i32 starting_cycles, Mem& mem, bool* completed_out = nullptr) {
+    i32 cpu_mode_decider(bool manual_mode, i32& cycles, i32 cycle_count, Mem& mem, bool* completed_out = nullptr) {
         if (manual_mode) {
             while (true) {
                 std::cout << colors::YELLOW << "[Step: Enter/s/q]: " << colors::RESET;
@@ -137,7 +141,7 @@ class Cpu {
                     break;
                 } else if (input == "s" || input == "state") {
                     // Show CPU state without advancing
-                    print_state(starting_cycles - cycles, false);
+                    print_state(cycle_count, false);
                     continue;
                 } else if (input == "q" || input == "quit") {
                     // Quit execution
@@ -148,7 +152,7 @@ class Cpu {
                         *completed_out = false;
                     }
 
-                    // Return the number of cycles actually used
+                    // Return abort status
                     return ABORT_STATUS;
                 } else {
                     std::cout << colors::RED << "Invalid input. Press Enter to continue, 's' for state, 'q' to quit.\n"
@@ -157,7 +161,7 @@ class Cpu {
                 }
             }
         }
-        return starting_cycles - cycles;
+        return cycle_count;
     }
 
     void print_current_execution(word ins, Cpu& cpu, Mem& mem, bool testing_env = false) {
