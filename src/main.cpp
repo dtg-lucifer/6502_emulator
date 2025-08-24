@@ -26,7 +26,7 @@ int main() {
     cpu.reset(mem);
 
     // Set initial register values after reset
-    cpu.set(Register::X, 0x05);  // Use X=5 to match the offsets in the demo program
+    cpu.set(Register::X, 0x05);
     cpu.set(Register::Y, 0x02);
 
     std::cout << "CPU Program Counter after reset: 0x" << std::hex << cpu.PC << std::dec << std::endl;
