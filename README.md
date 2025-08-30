@@ -16,6 +16,7 @@ This project is documented across multiple files for better organization:
 - [CPU](docs/CPU.md) - CPU implementation, registers, and flags
 - [Memory](docs/MEMORY.md) - Memory organization and special regions
 - [Opcodes](docs/OPCODES.md) - Instruction set and addressing modes
+- [Assembler](docs/ASSEMBLER.md) - 6502 assembler usage and instruction reference
 - [Demo Programs](docs/DEMO_PROGRAMS.md) - Example programs and execution
 - [Testing](docs/TESTING.md) - Testing framework and utilities
 
@@ -49,6 +50,23 @@ make build
 make run
 ```
 
+### Using the Assembler
+
+To assemble 6502 assembly files:
+
+```bash
+# Assemble a program
+./build/bin/6502_assembler programs/counter.s
+
+# Assemble with verbose output
+./build/bin/6502_assembler -v programs/counter.s
+
+# Specify output file
+./build/bin/6502_assembler -o counter.bin programs/counter.s
+```
+
+See the [Assembler Documentation](docs/ASSEMBLER.md) for complete instruction reference and usage examples.
+
 ### Running Tests
 
 ```bash
@@ -59,25 +77,42 @@ make test
 
 The emulator currently implements:
 
-- Basic CPU structure with registers (A, X, Y, PC, SP)
-- Status flags (C, Z, I, D, B, V, N)
-- Memory access with a 64KB address space
-- Instruction implementations:
+- **CPU Emulation**: Complete 6502 CPU with registers (A, X, Y, PC, SP) and status flags (C, Z, I, D, B, V, N)
+- **Memory System**: Full 64KB address space with zero page and stack handling
+- **Complete Instruction Set**: All standard 6502 instructions including:
     - Load/Store operations (LDA, LDX, LDY, STA, STX, STY)
-    - Subroutine handling (JSR, RTS)
+    - Arithmetic operations (ADC, SBC, CMP, CPX, CPY)
+    - Logical operations (AND, EOR, ORA, BIT)
+    - Shift/Rotate operations (ASL, LSR, ROL, ROR)
+    - Increment/Decrement operations (INC, INX, INY, DEC, DEX, DEY)
+    - Branch operations (BCC, BCS, BEQ, BMI, BNE, BPL, BVC, BVS)
+    - Jump and subroutine operations (JMP, JSR, RTS, BRK)
     - Stack operations (PHA, PHP, PLA, PLP, TXS, TSX)
-    - Jump instructions (JMP absolute, JMP indirect)
-    - No Operation (NOP)
+    - Register transfer operations (TAX, TAY, TXA, TYA)
+    - Status flag operations (CLC, CLD, CLI, CLV, SEC, SED, SEI)
+- **6502 Assembler**: Complete assembler that converts assembly language to binary
+    - All 6502 addressing modes
+    - Labels and symbolic addressing
+    - Assembler directives (.org, .word, .byte)
+    - Multiple number formats (decimal, hex, binary)
+    - Comprehensive error reporting
 
 ## 🔨 Development
 
 The project uses CMake for building and testing:
 
 - `make setup` - Configure the build system
-- `make build` - Build the emulator
+- `make build` - Build the emulator and assembler
 - `make run` - Run the emulator
 - `make test` - Run the test suite
 - `make debug` - Debug the emulator with GDB
+
+### Available Executables
+
+After building, you'll find these executables in `build/bin/`:
+
+- `6502_cpu_emulator` - The main CPU emulator
+- `6502_assembler` - The 6502 assembler for converting assembly to binary
 
 ## 📝 License
 
