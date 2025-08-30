@@ -42,8 +42,22 @@ add_library(emulator_core
     src/instructions/tsx.cpp
 )
 
+# Create a library for the assembler
+add_library(assembler_core
+    assembler/lexer.cpp
+    assembler/parser.cpp
+    assembler/ir.cpp
+    assembler/codegen.cpp
+    assembler/main.cpp
+)
+
 # Make includes available to any target linking against emulator_core
 target_include_directories(emulator_core PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+# Make includes available to any target linking against assembler_core
+target_include_directories(assembler_core PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
@@ -68,6 +82,13 @@ if(ENABLE_TESTING)
         tests/stx_test.cpp
         tests/sty_test.cpp
         tests/stack_operations_test.cpp
+        tests/and_test.cpp
+        tests/eor_test.cpp
+        tests/ora_test.cpp
+        tests/status_flag_test.cpp
+        tests/bit_manipulation_test.cpp
+        tests/shifts_rotates_test.cpp
+        tests/branch_test.cpp
     )
 
     # Link the test executable with the core library
@@ -81,6 +102,14 @@ else()
     # Link the main executable with the core library
     target_link_libraries(6502_cpu_emulator PRIVATE emulator_core)
 endif()
+
+# Add the assembler executable
+add_executable(6502_assembler
+    assembler/assembler.cpp
+)
+
+# Link the assembler executable with the assembler and emulator core libraries
+target_link_libraries(6502_assembler PRIVATE assembler_core emulator_core)
 
 # Create a symbolic link to compile_commands.json in the source directory
 # This helps many IDEs find the compilation database

@@ -31,6 +31,14 @@ run:
 	./build/bin/6502_cpu_emulator
 .PHONY: run
 
+assemble:
+	./build/bin/6502_assembler programs/counter.s
+.PHONY: assemble
+
+assemble-verbose:
+	./build/bin/6502_assembler -v programs/counter.s
+.PHONY: assemble-verbose
+
 test: setup-testing build
 	./build/bin/emulator_test
 .PHONY: test
