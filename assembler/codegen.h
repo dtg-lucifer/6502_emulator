@@ -7,7 +7,6 @@
 
 #include "assembler_types.h"
 #include "ir.h"
-#include "op_codes.h"
 
 namespace assembler {
 

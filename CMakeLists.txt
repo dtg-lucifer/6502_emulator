@@ -44,11 +44,11 @@ add_library(emulator_core
 
 # Create a library for the assembler
 add_library(assembler_core
-    src/assembler/lexer.cpp
-    src/assembler/parser.cpp
-    src/assembler/ir.cpp
-    src/assembler/codegen.cpp
-    src/assembler/main.cpp
+    assembler/lexer.cpp
+    assembler/parser.cpp
+    assembler/ir.cpp
+    assembler/codegen.cpp
+    assembler/main.cpp
 )
 
 # Make includes available to any target linking against emulator_core
@@ -105,7 +105,7 @@ endif()
 
 # Add the assembler executable
 add_executable(6502_assembler
-    src/assembler/assembler.cpp
+    assembler/assembler.cpp
 )
 
 # Link the assembler executable with the assembler and emulator core libraries
