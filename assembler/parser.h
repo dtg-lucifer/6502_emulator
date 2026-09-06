@@ -6,7 +6,6 @@
 #include <vector>
 
 #include "assembler_types.h"
-#include "lexer.h"
 
 namespace assembler {
 

@@ -1,7 +1,6 @@
 #include "ir.h"
 
 #include <iostream>
-#include <sstream>
 
 namespace assembler {
 

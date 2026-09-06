@@ -19,8 +19,10 @@ int main() {
     mem.init();
 
     // Load demo program into memory before reset
-    auto lda_demo = demo_programs::get_lda_demo();
-    binary_reader::read_from_array(cpu, mem, lda_demo);
+
+    // auto demo_programs = demo_programs::get_lda_demo();
+    auto demo_programs = demo_programs::get_instruction_demo();
+    binary_reader::read_from_array(cpu, mem, demo_programs);
 
     // Reset CPU - this will now automatically load the PC from reset vector
     cpu.reset(mem);
